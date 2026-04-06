@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embedded Systems — Complete Study Sheet</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;
+  --text:#e6edf3;--muted:#8b949e;
+  --cyan:#58a6ff;--green:#3fb950;--orange:#f0883e;
+  --purple:#bc8cff;--yellow:#e3b341;--red:#f85149;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.6;}
+/* HEADER */
+.hdr{background:var(--bg2);border-bottom:2px solid var(--cyan);padding:12px 20px;position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.hdr h1{font-size:16px;font-weight:800;color:var(--cyan);}
+.hdr p{font-size:10px;color:var(--muted);margin-top:2px;}
+/* TABS */
+.tabs{display:flex;gap:3px;background:var(--bg2);padding:8px 20px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;position:sticky;top:54px;z-index:100;}
+.tab{padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:5px 5px 0 0;color:var(--muted);background:transparent;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:var(--text);}
+.tab.on{color:#000;background:var(--cyan);border-color:var(--cyan);}
+/* PAGE */
+.page{display:none;padding:16px 20px;}
+.page.on{display:block;}
+/* SECTION HEADER */
+.sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
+.sh::after{content:'';flex:1;height:1px;background:var(--border);}
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:14px;overflow:hidden;}
+.card-head{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.lab-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;}
+.card-title{font-size:14px;font-weight:700;}
+.card-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.tags{display:flex;gap:5px;margin-left:auto;flex-wrap:wrap;}
+.tag{padding:2px 7px;border-radius:3px;font-size:10px;font-weight:700;font-family:var(--mono);}
+/* LAYOUT */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+.col{padding:14px 16px;border-right:1px solid var(--border);}
+.col:last-child{border-right:none;}
+.full{padding:14px 16px;}
+/* STITLE */
+.st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.st.b{color:var(--cyan);border-color:#1f3a5f;}
+.st.g{color:var(--green);border-color:#1a3a1a;}
+.st.o{color:var(--orange);border-color:#3a2010;}
+.st.p{color:var(--purple);border-color:#2a1a4a;}
+.st.y{color:var(--yellow);border-color:#3a2d00;}
+.st.r{color:var(--red);border-color:#3a1010;}
+/* CODE */
+pre{background:#010409;border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:5px;padding:12px;font-family:var(--mono);font-size:11px;line-height:1.85;overflow-x:auto;white-space:pre;margin:6px 0;}
+pre.asm{border-left-color:var(--orange);}
+pre.note{border-left-color:var(--purple);}
+/* SYNTAX */
+.k{color:#ff7b72;}.t{color:var(--yellow);}.f{color:var(--cyan);}.n{color:var(--orange);}.s{color:var(--green);}.c{color:#6e7681;font-style:italic;}.r{color:var(--purple);}.d{color:#e3b341;}
+/* CIRCUIT */
+.ckt{background:#081220;border:1px solid #1f3a5f;border-radius:5px;padding:9px 12px;font-family:var(--mono);font-size:11px;line-height:1.9;color:#7ec8e3;margin:6px 0;}
+/* STEPS */
+.steps{list-style:none;}
+.steps li{display:flex;gap:7px;margin-bottom:5px;align-items:flex-start;}
+.sn{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:var(--mono);font-size:9px;color:var(--muted);flex-shrink:0;margin-top:2px;}
+.st2{font-size:11.5px;}
+.st2 b{color:var(--cyan);}.st2 .g{color:var(--green);}.st2 .o{color:var(--orange);}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:11.5px;}
+th{background:var(--bg3);color:var(--muted);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:5px 7px;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:4px 7px;border-bottom:1px solid #1c2128;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#1c2128;}
+.mono{font-family:var(--mono);font-size:10.5px;}
+.cy{color:var(--cyan);}.gr{color:var(--green);}.or{color:var(--orange);}.pu{color:var(--purple);}.yl{color:var(--yellow);}.mu{color:var(--muted);}.rd{color:var(--red);}
+/* INFO BOX */
+.info{display:flex;gap:7px;padding:7px 10px;border-radius:5px;margin:6px 0;font-size:11px;line-height:1.5;}
+.info.bl{background:#0d1f3c;border:1px solid #1f4080;}
+.info.yw{background:#2d1f00;border:1px solid #7a5500;}
+.info.gn{background:#0d2a0d;border:1px solid #1e5a1e;}
+.info.rd{background:#2d0d0d;border:1px solid #7a1e1e;}
+.info.or{background:#2d1500;border:1px solid #7a3500;}
+/* FACT GRID */
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:7px;margin:6px 0;}
+.fact{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 9px;}
+.fl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.fv{font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px;}
+hr{border:none;border-top:1px solid var(--border);margin:10px 0;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+@media(max-width:750px){.g2,.g3,.g4{grid-template-columns:1fr;}.col{border-right:none;border-bottom:1px solid var(--border);}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <h1>⚡ EMBEDDED SYSTEMS — COMPLETE ALL-IN-ONE SHEET</h1>
+    <p>Theory · 8051 · LPC2148 · All Labs · Assembly + Embedded C · Simple Code · Everything You Need</p>
+  </div>
+</div>
+<div class="tabs">
+  <div class="tab on"  onclick="go('theory')">📖 Theory</div>
+  <div class="tab"     onclick="go('8051')">🔲 8051 Labs</div>
+  <div class="tab"     onclick="go('arm')">⚙ ARM Labs</div>
+  <div class="tab"     onclick="go('ref')">📋 Reference</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- THEORY PAGE -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="pg-theory" class="page on">
+
+<div class="sh">Core Concepts</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">What is an Embedded System?</div></div>
+  <div class="g3">
+    <div class="col">
+      <div class="st b">Embedded System</div>
+      <p style="font-size:11.5px;margin-bottom:8px">A computer built <b style="color:var(--cyan)">inside a device</b> to do <b style="color:var(--cyan)">one fixed job</b>. It is hidden — you don't see it as a computer.</p>
+      <ul class="steps">
+        <li><span class="sn">✓</span><span class="st2">Single purpose — one job, does it forever</span></li>
+        <li><span class="sn">✓</span><span class="st2">Real-time — must respond within a fixed time</span></li>
+        <li><span class="sn">✓</span><span class="st2">Low power, small size, very low cost</span></li>
+        <li><span class="sn">✓</span><span class="st2">No OS or tiny RTOS only</span></li>
+        <li><span class="sn">e.g.</span><span class="st2 o">Washing machine, pacemaker, traffic light, ATM, TV remote</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st o">General Purpose Computer</div>
+      <p style="font-size:11.5px;margin-bottom:8px">Designed to do <b style="color:var(--orange)">any task</b> the user chooses. Flexible, powerful, but expensive and large.</p>
+      <ul class="steps">
+        <li><span class="sn">✓</span><span class="st2">Multi-purpose — runs any software</span></li>
+        <li><span class="sn">✓</span><span class="st2">Large RAM, big storage, full OS</span></li>
+        <li><span class="sn">✓</span><span class="st2">User interaction via keyboard, mouse, screen</span></li>
+        <li><span class="sn">✗</span><span class="st2 o">No guaranteed real-time response</span></li>
+        <li><span class="sn">e.g.</span><span class="st2 o">Laptop, desktop, server</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st g">Real-Time Constraint</div>
+      <p style="font-size:11.5px;margin-bottom:6px">The most critical property of embedded systems.</p>
+      <table>
+        <tr><th>Type</th><th>Miss deadline?</th><th>Example</th></tr>
+        <tr><td><b style="color:var(--red)">Hard</b></td><td>Catastrophic failure</td><td>Pacemaker, ABS brakes</td></tr>
+        <tr><td><b style="color:var(--orange)">Soft</b></td><td>Degraded quality</td><td>Video streaming</td></tr>
+      </table>
+      <div class="info yw" style="margin-top:8px"><span>💡</span><span>In ABS brakes, a 500ms late response = crash. Timing IS correctness.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><div class="card-title">CISC vs RISC — The Two Processor Philosophies</div></div>
+  <div class="g2">
+    <div class="col">
+      <div class="st o">CISC — Complex Instruction Set Computer</div>
+      <ul class="steps">
+        <li><span class="sn">Idea</span><span class="st2">Give the programmer <b>powerful, complex instructions</b>. Hardware does heavy work.</span></li>
+        <li><span class="sn">Instr</span><span class="st2">Large set — hundreds of instructions, variable length (1–15 bytes)</span></li>
+        <li><span class="sn">Cycles</span><span class="st2">Variable — complex instructions take multiple clock cycles</span></li>
+        <li><span class="sn">Memory</span><span class="st2">Any instruction can access memory directly</span></li>
+        <li><span class="sn">Regs</span><span class="st2">Few registers</span></li>
+        <li><span class="sn">e.g.</span><span class="st2 o"><b>Intel x86, 8051</b> — your laptop and 8051 kit</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st b">RISC — Reduced Instruction Set Computer</div>
+      <ul class="steps">
+        <li><span class="sn">Idea</span><span class="st2">Keep instructions <b>simple and uniform</b>. Execute blazing fast. Compiler does the work.</span></li>
+        <li><span class="sn">Instr</span><span class="st2">Small set — ~100 instructions, <b>fixed 32-bit size</b> (in ARM)</span></li>
+        <li><span class="sn">Cycles</span><span class="st2">Mostly 1 cycle per instruction — predictable</span></li>
+        <li><span class="sn">Memory</span><span class="st2"><b>LOAD/STORE only</b> — arithmetic only between registers</span></li>
+        <li><span class="sn">Regs</span><span class="st2">Many registers — ARM has 16</span></li>
+        <li><span class="sn">e.g.</span><span class="st2 o"><b>ARM (LPC2148)</b> — your ARM board</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><div class="card-title">Von Neumann vs Harvard Architecture</div></div>
+  <div class="g2">
+    <div class="col">
+      <div class="st o">Von Neumann</div>
+      <div class="ckt">CPU ←──── Single bus ────► One shared memory
+                        (code + data together)
+
+Problem: CPU can't fetch instruction AND
+data at the same time → BOTTLENECK</div>
+      <ul class="steps">
+        <li><span class="sn">Memory</span><span class="st2">One memory for both code and data</span></li>
+        <li><span class="sn">Bus</span><span class="st2">One shared bus</span></li>
+        <li><span class="sn">Speed</span><span class="st2">Slower — can only do one at a time</span></li>
+        <li><span class="sn">e.g.</span><span class="st2 o">Your PC / laptop</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st b">Harvard</div>
+      <div class="ckt">CPU ←── Instruction bus ──► Program ROM
+    ←── Data bus       ──► Data RAM
+
+Both buses work SIMULTANEOUSLY → FASTER</div>
+      <ul class="steps">
+        <li><span class="sn">Memory</span><span class="st2">Separate memory for code and data</span></li>
+        <li><span class="sn">Bus</span><span class="st2">Two independent buses</span></li>
+        <li><span class="sn">Speed</span><span class="st2">Faster — parallel access</span></li>
+        <li><span class="sn">8051</span><span class="st2 g">Pure Harvard — ROM for code, RAM for data</span></li>
+        <li><span class="sn">ARM</span><span class="st2 b">Modified Harvard — separate caches, shared address space</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><div class="card-title">Endianness — How Multi-byte Data Stored in Memory</div></div>
+  <div class="g2">
+    <div class="col">
+      <div class="st o">Big Endian — MSB at lowest address</div>
+      <div class="ckt">Store 0x12345678 at address 0x1000:
+Address 0x1000 → 0x12  ← MSB first
+Address 0x1001 → 0x34
+Address 0x1002 → 0x56
+Address 0x1003 → 0x78  ← LSB last
+Reads naturally left to right → 8051 is Big Endian</div>
+    </div>
+    <div class="col">
+      <div class="st b">Little Endian — LSB at lowest address</div>
+      <div class="ckt">Store 0x12345678 at address 0x1000:
+Address 0x1000 → 0x78  ← LSB first
+Address 0x1001 → 0x56
+Address 0x1002 → 0x34
+Address 0x1003 → 0x12  ← MSB last
+ARM default is Little Endian → LPC2148</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><div class="card-title">Pipelining — ARM7 3-Stage Pipeline</div></div>
+  <div class="g2">
+    <div class="col">
+      <div class="st b">How Pipelining Works</div>
+      <div class="ckt">WITHOUT pipeline (sequential):
+Instr1: [Fetch]─[Decode]─[Execute]
+Instr2:                              [Fetch]─[Decode]─[Execute]
+→ 6 time slots for 2 instructions
+
+WITH pipeline (ARM7 — 3 stages):
+Time: T1    T2      T3      T4      T5
+I1: [Fetch][Decode][Execute]
+I2:         [Fetch][Decode][Execute]
+I3:                 [Fetch][Decode][Execute]
+→ 5 time slots for 3 instructions
+→ Peak: 1 instruction completes every cycle</div>
+    </div>
+    <div class="col">
+      <div class="st o">PC Offset — Important for Exams</div>
+      <p style="font-size:11.5px;margin-bottom:8px">Because of 3-stage pipeline, PC always points <b style="color:var(--orange)">2 instructions ahead</b> of the currently executing instruction.</p>
+      <div class="ckt">Executing at 0x1000 → PC = 0x1008
+PC = current_address + 8 bytes
+(4 bytes per ARM instruction × 2 ahead)</div>
+      <div class="st b" style="margin-top:10px">Pipeline Hazards</div>
+      <table>
+        <tr><th>Type</th><th>Cause</th><th>Effect</th></tr>
+        <tr><td>Data</td><td>Next instr needs result not ready</td><td>Stall (bubble)</td></tr>
+        <tr><td>Control</td><td>Branch — wrong instr fetched</td><td>Flush pipeline</td></tr>
+        <tr><td>Structural</td><td>Two instrs need same hardware</td><td>Stall</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="sh">8051 Microcontroller Architecture</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">8051 — Key Facts and Internal Architecture</div></div>
+  <div class="col full">
+    <div class="facts">
+      <div class="fact"><div class="fl">Architecture</div><div class="fv cy">Harvard</div></div>
+      <div class="fact"><div class="fl">Instr Set</div><div class="fv or">CISC</div></div>
+      <div class="fact"><div class="fl">Data width</div><div class="fv">8-bit</div></div>
+      <div class="fact"><div class="fl">Address bus</div><div class="fv">16-bit</div></div>
+      <div class="fact"><div class="fl">Internal RAM</div><div class="fv gr">128 bytes</div></div>
+      <div class="fact"><div class="fl">Internal ROM</div><div class="fv">4 KB</div></div>
+      <div class="fact"><div class="fl">Timers</div><div class="fv pu">2 × 16-bit</div></div>
+      <div class="fact"><div class="fl">I/O Ports</div><div class="fv">4 × 8 = 32</div></div>
+      <div class="fact"><div class="fl">UART</div><div class="fv cy">1 full-duplex</div></div>
+      <div class="fact"><div class="fl">Interrupts</div><div class="fv">6 sources</div></div>
+      <div class="fact"><div class="fl">Clock</div><div class="fv">12 MHz typ</div></div>
+      <div class="fact"><div class="fl">1 machine cycle</div><div class="fv or">12 clocks = 1µs</div></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="col">
+      <div class="st g">RAM Map (128 bytes: 00H–7FH)</div>
+      <table>
+        <tr><th>Address</th><th>Content</th></tr>
+        <tr><td class="mono cy">00H–07H</td><td>Register Bank 0 — R0 to R7 (default)</td></tr>
+        <tr><td class="mono">08H–0FH</td><td>Register Bank 1</td></tr>
+        <tr><td class="mono">10H–17H</td><td>Register Bank 2</td></tr>
+        <tr><td class="mono">18H–1FH</td><td>Register Bank 3</td></tr>
+        <tr><td class="mono gr">20H–2FH</td><td>Bit-addressable area (128 bits)</td></tr>
+        <tr><td class="mono">30H–7FH</td><td>General RAM + Stack</td></tr>
+        <tr><td class="mono or">80H–FFH</td><td>SFR space (peripheral registers)</td></tr>
+      </table>
+      <div class="info yw"><span>⚠</span><span>Stack starts at 08H (SP initialized to 07H). Grows UP.</span></div>
+    </div>
+    <div class="col">
+      <div class="st o">Key SFR Addresses</div>
+      <table>
+        <tr><th>Address</th><th>Name</th><th>Purpose</th></tr>
+        <tr><td class="mono cy">E0H</td><td class="mono">ACC</td><td>Accumulator</td></tr>
+        <tr><td class="mono cy">F0H</td><td class="mono">B</td><td>MUL/DIV helper</td></tr>
+        <tr><td class="mono cy">D0H</td><td class="mono">PSW</td><td>Flags: CY AC OV P + RS1 RS0</td></tr>
+        <tr><td class="mono cy">81H</td><td class="mono">SP</td><td>Stack pointer (init=07H)</td></tr>
+        <tr><td class="mono or">88H</td><td class="mono">TCON</td><td>Timer control: TF1 TR1 TF0 TR0...</td></tr>
+        <tr><td class="mono or">89H</td><td class="mono">TMOD</td><td>Timer mode select</td></tr>
+        <tr><td class="mono or">8AH</td><td class="mono">TL0</td><td>Timer 0 low byte</td></tr>
+        <tr><td class="mono or">8CH</td><td class="mono">TH0</td><td>Timer 0 high byte</td></tr>
+        <tr><td class="mono or">8BH</td><td class="mono">TL1</td><td>Timer 1 low byte</td></tr>
+        <tr><td class="mono or">8DH</td><td class="mono">TH1</td><td>Timer 1 high byte</td></tr>
+        <tr><td class="mono cy">98H</td><td class="mono">SCON</td><td>Serial control</td></tr>
+        <tr><td class="mono cy">99H</td><td class="mono">SBUF</td><td>Serial buffer (TX/RX)</td></tr>
+        <tr><td class="mono gr">A8H</td><td class="mono">IE</td><td>Interrupt enable</td></tr>
+        <tr><td class="mono">80H</td><td class="mono">P0</td><td>Port 0 (open drain)</td></tr>
+        <tr><td class="mono">90H</td><td class="mono">P1</td><td>Port 1 (pull-up)</td></tr>
+        <tr><td class="mono">A0H</td><td class="mono">P2</td><td>Port 2</td></tr>
+        <tr><td class="mono">B0H</td><td class="mono">P3</td><td>Port 3 (alt functions)</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="st p">Port 3 Alternate Functions</div>
+      <table>
+        <tr><th>Pin</th><th>Alternate</th></tr>
+        <tr><td class="mono">P3.0</td><td class="cy">RXD — serial receive</td></tr>
+        <tr><td class="mono">P3.1</td><td class="cy">TXD — serial transmit</td></tr>
+        <tr><td class="mono">P3.2</td><td class="or">INT0 — external interrupt 0</td></tr>
+        <tr><td class="mono">P3.3</td><td class="or">INT1 — external interrupt 1</td></tr>
+        <tr><td class="mono">P3.4</td><td class="gr">T0 — Timer 0 ext. input</td></tr>
+        <tr><td class="mono">P3.5</td><td class="gr">T1 — Timer 1 ext. input</td></tr>
+        <tr><td class="mono">P3.6</td><td class="mu">WR — write strobe</td></tr>
+        <tr><td class="mono">P3.7</td><td class="mu">RD — read strobe</td></tr>
+      </table>
+      <div class="st b" style="margin-top:10px">Interrupt Vectors (fixed ROM)</div>
+      <table>
+        <tr><th>Source</th><th>Vector</th><th>IE bit</th></tr>
+        <tr><td>INT0 (P3.2)</td><td class="mono cy">0003H</td><td class="mono">EX0</td></tr>
+        <tr><td>Timer 0</td><td class="mono cy">000BH</td><td class="mono">ET0</td></tr>
+        <tr><td>INT1 (P3.3)</td><td class="mono cy">0013H</td><td class="mono">EX1</td></tr>
+        <tr><td>Timer 1</td><td class="mono cy">001BH</td><td class="mono">ET1</td></tr>
+        <tr><td>Serial</td><td class="mono cy">0023H</td><td class="mono">ES</td></tr>
+      </table>
+      <div class="info bl" style="margin-top:6px"><span>💡</span><span>interrupt keyword numbers in C: INT0=0, T0=1, INT1=2, T1=3, Serial=4</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><div class="card-title">8051 Timer + Serial Setup — The Formulas</div></div>
+  <div class="g3">
+    <div class="col">
+      <div class="st o">TMOD Register Values</div>
+      <table>
+        <tr><th>Value</th><th>What it sets</th></tr>
+        <tr><td class="mono or">0x01</td><td>Timer0, Mode1 (16-bit) ← most used</td></tr>
+        <tr><td class="mono or">0x02</td><td>Timer0, Mode2 (8-bit auto-reload)</td></tr>
+        <tr><td class="mono or">0x10</td><td>Timer1, Mode1 (16-bit)</td></tr>
+        <tr><td class="mono or">0x20</td><td>Timer1, Mode2 ← for UART baud rate</td></tr>
+        <tr><td class="mono or">0x12</td><td>T0=Mode2, T1=Mode1</td></tr>
+        <tr><td class="mono or">0x21</td><td>T0=Mode1, T1=Mode2</td></tr>
+      </table>
+      <div class="st g" style="margin-top:8px">Preload Formula (Mode1)</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:8px;font-family:var(--mono);font-size:11px;line-height:2">
+        <span class="cy">Preload = 65536 − count</span><br>
+        <span class="mu">At 12MHz: count = time_in_µs</span><br>
+        <span class="mu">For 1ms: count=1000, preload=64536=0xFC18</span><br>
+        <span class="gr">TH0=0xFC, TL0=0x18</span><br>
+        <span class="mu">For 50ms: count=50000, preload=15536=0x3CB0</span><br>
+        <span class="gr">TH0=0x3C, TL0=0xB0</span>
+      </div>
+    </div>
+    <div class="col">
+      <div class="st o">Ready-to-Use Preloads (12MHz)</div>
+      <table>
+        <tr><th>Delay</th><th>TH0</th><th>TL0</th></tr>
+        <tr><td>1 ms</td><td class="mono cy">0xFC</td><td class="mono cy">0x18</td></tr>
+        <tr><td>5 ms</td><td class="mono cy">0xEE</td><td class="mono cy">0x00</td></tr>
+        <tr><td>10 ms</td><td class="mono cy">0xD8</td><td class="mono cy">0xF0</td></tr>
+        <tr><td>50 ms</td><td class="mono cy">0x3C</td><td class="mono cy">0xB0</td></tr>
+        <tr><td>100 ms</td><td class="mono cy">0x79</td><td class="mono cy">0x60</td></tr>
+        <tr><td>250 ms</td><td class="mono cy">0x06</td><td class="mono cy">0xF0</td></tr>
+      </table>
+      <div class="st g" style="margin-top:8px">Mode2 (8-bit Auto-Reload)</div>
+      <div style="font-size:11px;line-height:1.8;color:var(--muted)">
+        TH0 holds reload value, TL0 counts up.<br>
+        When TL0 overflows → auto-reloads from TH0.<br>
+        <span style="color:var(--green)">Preload = 256 − count</span>
+      </div>
+    </div>
+    <div class="col">
+      <div class="st p">Baud Rate — TH1 Values</div>
+      <table>
+        <tr><th>Baud</th><th>Crystal</th><th>TH1</th></tr>
+        <tr><td>9600</td><td>11.0592 MHz</td><td class="mono cy">0xFD</td></tr>
+        <tr><td>4800</td><td>11.0592 MHz</td><td class="mono cy">0xFA</td></tr>
+        <tr><td>2400</td><td>11.0592 MHz</td><td class="mono cy">0xF4</td></tr>
+        <tr><td>1200</td><td>11.0592 MHz</td><td class="mono cy">0xE8</td></tr>
+      </table>
+      <div class="st b" style="margin-top:8px">Serial Setup (9600 baud)</div>
+      <pre class="note"><span class="c">// Always in this exact order:</span>
+TMOD = <span class="n">0x20</span>;  <span class="c">// T1, Mode2</span>
+TH1  = <span class="n">0xFD</span>;  <span class="c">// 9600 baud</span>
+SCON = <span class="n">0x50</span>;  <span class="c">// Mode1 UART, REN=1</span>
+TR1  = <span class="n">1</span>;     <span class="c">// start baud clock</span>
+
+<span class="c">// Send: SBUF=ch; while(!TI); TI=0;</span>
+<span class="c">// Recv: while(!RI); ch=SBUF; RI=0;</span></pre>
+    </div>
+  </div>
+</div>
+
+<div class="sh">ARM LPC2148 Architecture</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">LPC2148 — ARM7TDMI-S — Key Facts</div></div>
+  <div class="col full">
+    <div class="facts">
+      <div class="fact"><div class="fl">Core</div><div class="fv cy">ARM7TDMI-S</div></div>
+      <div class="fact"><div class="fl">Data width</div><div class="fv">32-bit</div></div>
+      <div class="fact"><div class="fl">Architecture</div><div class="fv cy">Mod. Harvard</div></div>
+      <div class="fact"><div class="fl">Instr Set</div><div class="fv gr">RISC</div></div>
+      <div class="fact"><div class="fl">Pipeline</div><div class="fv">3-stage</div></div>
+      <div class="fact"><div class="fl">Flash</div><div class="fv or">512 KB</div></div>
+      <div class="fact"><div class="fl">SRAM</div><div class="fv or">32 KB</div></div>
+      <div class="fact"><div class="fl">Max clock</div><div class="fv">60 MHz</div></div>
+      <div class="fact"><div class="fl">GPIO pins</div><div class="fv cy">45 pins</div></div>
+      <div class="fact"><div class="fl">UARTs</div><div class="fv">2</div></div>
+      <div class="fact"><div class="fl">Timers</div><div class="fv pu">2 × 32-bit</div></div>
+      <div class="fact"><div class="fl">ADC</div><div class="fv">10-bit 8-ch</div></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="col">
+      <div class="st b">TDMI-S — What Each Letter Means</div>
+      <table>
+        <tr><th>Letter</th><th>Meaning</th></tr>
+        <tr><td class="cy mono">T</td><td>Thumb — 16-bit instruction set supported</td></tr>
+        <tr><td class="cy mono">D</td><td>Debug — on-chip debug hardware</td></tr>
+        <tr><td class="cy mono">M</td><td>Multiplier — enhanced hardware multiplier</td></tr>
+        <tr><td class="cy mono">I</td><td>ICE — EmbeddedICE debug interface</td></tr>
+        <tr><td class="cy mono">S</td><td>Synthesizable — provided as HDL code</td></tr>
+      </table>
+      <div class="st g" style="margin-top:8px">ARM Registers</div>
+      <table>
+        <tr><th>Register</th><th>Name</th><th>Purpose</th></tr>
+        <tr><td class="mono cy">R0–R3</td><td>a1–a4</td><td>Function args / return value</td></tr>
+        <tr><td class="mono">R4–R11</td><td>v1–v8</td><td>Local vars — callee must save</td></tr>
+        <tr><td class="mono or">R13</td><td>SP</td><td>Stack Pointer — grows DOWN</td></tr>
+        <tr><td class="mono or">R14</td><td>LR</td><td>Link Register — return address</td></tr>
+        <tr><td class="mono or">R15</td><td>PC</td><td>Program Counter = current+8</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="st o">GPIO — 3 Steps Every Program</div>
+      <pre class="note"><span class="c">// Step 1: PINSEL — make pin GPIO (00=GPIO)</span>
+PINSEL0 &amp;= ~(<span class="n">3</span> &lt;&lt; (<span class="n">2</span> * pin));
+<span class="c">// OR for all: PINSEL0 = 0x00000000;</span>
+
+<span class="c">// Step 2: IO0DIR — set direction</span>
+IO0DIR |=  (<span class="n">1</span> &lt;&lt; pin); <span class="c">// output</span>
+IO0DIR &amp;= ~(<span class="n">1</span> &lt;&lt; pin); <span class="c">// input</span>
+
+<span class="c">// Step 3: Control</span>
+IO0SET = (<span class="n">1</span> &lt;&lt; pin);   <span class="c">// HIGH</span>
+IO0CLR = (<span class="n">1</span> &lt;&lt; pin);   <span class="c">// LOW</span>
+IO0PIN ^= (<span class="n">1</span> &lt;&lt; pin);  <span class="c">// toggle</span>
+IO0PIN &amp; (<span class="n">1</span> &lt;&lt; pin)    <span class="c">// read</span>
+
+<span class="c">// Use #define to name pins:</span>
+<span class="d">#define</span> <span class="r">LED</span> (<span class="n">1</span>&lt;&lt;<span class="n">10</span>)   <span class="c">// P0.10</span>
+IO0SET = <span class="r">LED</span>;   IO0CLR = <span class="r">LED</span>;</pre>
+    </div>
+    <div class="col">
+      <div class="st p">PINSEL0 — Pin to Bit Formula</div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:6px">Pin P0.n uses bits (2n+1):(2n) in PINSEL0</p>
+      <table>
+        <tr><th>Pin</th><th>PINSEL0 bits</th><th>Clear (GPIO)</th></tr>
+        <tr><td class="mono cy">P0.0</td><td class="mono">1:0</td><td class="mono">~(3&lt;&lt;0)</td></tr>
+        <tr><td class="mono cy">P0.2</td><td class="mono">5:4</td><td class="mono">~(3&lt;&lt;4)</td></tr>
+        <tr><td class="mono cy">P0.3</td><td class="mono">7:6</td><td class="mono">~(3&lt;&lt;6)</td></tr>
+        <tr><td class="mono cy">P0.8</td><td class="mono">17:16</td><td class="mono">~(3&lt;&lt;16)</td></tr>
+        <tr><td class="mono cy">P0.9</td><td class="mono">19:18</td><td class="mono">~(3&lt;&lt;18)</td></tr>
+        <tr><td class="mono cy">P0.10</td><td class="mono">21:20</td><td class="mono">~(3&lt;&lt;20)</td></tr>
+      </table>
+      <div class="st b" style="margin-top:8px">UART0 Setup (P0.0=TXD, P0.1=RXD)</div>
+      <pre class="note"><span class="c">// 9600 baud at 15MHz PCLK</span>
+PINSEL0 |= <span class="n">0x00000005</span>; <span class="c">// TX+RX pins</span>
+U0LCR = <span class="n">0x83</span>; <span class="c">// 8N1 + DLAB=1</span>
+U0DLM = <span class="n">0x00</span>;
+U0DLL = <span class="n">0x62</span>; <span class="c">// divisor for 9600</span>
+U0LCR = <span class="n">0x03</span>; <span class="c">// 8N1, DLAB=0</span></pre>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 8051 LABS PAGE -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="pg-8051" class="page">
+
+<!-- HOW 8051 C WORKS -->
+<div class="sh">8051 Embedded C — Before Every Lab</div>
+<div class="card">
+  <div class="card-head"><div class="lab-num" style="background:#1f0a00;color:var(--orange)">!</div><div><div class="card-title">8051 Embedded C Fundamentals</div><div class="card-sub">Know this before writing any 8051 C code</div></div></div>
+  <div class="g3">
+    <div class="col">
+      <div class="st o">Header + sbit (pin naming)</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+<span class="c">// Gives you: P0 P1 P2 P3 TMOD TH0 TL0
+// SCON SBUF IE EA ET0 TR0 TF0 RI TI etc.</span>
+
+<span class="c">// Name individual pins with sbit:</span>
+<span class="r">sbit</span> LED    = P1^<span class="n">0</span>;  <span class="c">// P1.0</span>
+<span class="r">sbit</span> LED2   = P1^<span class="n">7</span>;  <span class="c">// P1.7</span>
+<span class="r">sbit</span> BUTTON = P2^<span class="n">0</span>;  <span class="c">// P2.0 input</span>
+<span class="r">sbit</span> RS     = P2^<span class="n">0</span>;  <span class="c">// LCD RS</span>
+<span class="r">sbit</span> EN     = P2^<span class="n">1</span>;  <span class="c">// LCD EN</span>
+<span class="r">sbit</span> SQUAREWAVE = P2^<span class="n">5</span>; <span class="c">// square wave</span>
+
+<span class="c">// Control pins directly:</span>
+LED = <span class="n">1</span>;         <span class="c">// HIGH</span>
+LED = <span class="n">0</span>;         <span class="c">// LOW</span>
+LED = !LED;      <span class="c">// toggle</span>
+<span class="k">if</span>(BUTTON==<span class="n">0</span>){ } <span class="c">// read (active LOW)</span>
+
+<span class="c">// Whole port at once:</span>
+P1 = <span class="n">0xFF</span>;  <span class="c">// all 8 pins HIGH</span>
+P1 = <span class="n">0x00</span>;  <span class="c">// all 8 pins LOW</span>
+
+<span class="c">// IMPORTANT: Read port — release first!</span>
+P1 = <span class="n">0xFF</span>;   <span class="c">// write 1s first</span>
+val = P1;     <span class="c">// now read</span></pre>
+    </div>
+    <div class="col">
+      <div class="st g">Delay + ISR Template</div>
+      <pre><span class="c">// Software delay (~1ms per call at 12MHz)</span>
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">unsigned int</span> ms) {
+    <span class="t">unsigned int</span> i, j;
+    <span class="k">for</span>(i=<span class="n">0</span>; i&lt;ms; i++)
+        <span class="k">for</span>(j=<span class="n">0</span>; j&lt;<span class="n">125</span>; j++);
+}
+
+<span class="c">// ISR syntax — MEMORIZE THIS:</span>
+<span class="k">void</span> <span class="f">my_isr</span>() <span class="r">interrupt</span> <span class="n">NUMBER</span> {
+    <span class="c">// ISR code here</span>
+}
+
+<span class="c">// interrupt numbers:</span>
+<span class="c">// 0 = INT0 (P3.2)</span>
+<span class="c">// 1 = Timer0</span>
+<span class="c">// 2 = INT1 (P3.3)</span>
+<span class="c">// 3 = Timer1</span>
+<span class="c">// 4 = Serial (TI/RI)</span>
+
+<span class="c">// Enable interrupts:</span>
+EA  = <span class="n">1</span>;   <span class="c">// global enable (MUST)</span>
+ET0 = <span class="n">1</span>;   <span class="c">// Timer0</span>
+EX0 = <span class="n">1</span>;   <span class="c">// INT0</span>
+IT0 = <span class="n">1</span>;   <span class="c">// edge triggered</span></pre>
+    </div>
+    <div class="col">
+      <div class="st b">Every Program Template</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="c">// 1. Name your pins</span>
+<span class="r">sbit</span> LED = P1^<span class="n">0</span>;
+
+<span class="c">// 2. Helper functions</span>
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">unsigned int</span> ms){
+    <span class="t">unsigned int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++)
+        <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">125</span>;j++);
+}
+
+<span class="c">// 3. ISR (if using interrupts)</span>
+<span class="k">void</span> <span class="f">timer0_isr</span>() <span class="r">interrupt</span> <span class="n">1</span> {
+    TH0 = <span class="n">0x3C</span>; TL0 = <span class="n">0xB0</span>; <span class="c">// reload</span>
+    LED = !LED;
+}
+
+<span class="c">// 4. main()</span>
+<span class="k">void</span> <span class="f">main</span>() {
+    <span class="c">// setup</span>
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="c">// main loop</span>
+    }
+}
+
+<span class="c">// Assembly structure:</span>
+<span class="c">//   ORG 0000H → LJMP MAIN</span>
+<span class="c">//   ORG 0030H → code</span>
+<span class="c">//   Interrupt vector ORG 000BH etc</span>
+<span class="c">//   Always end with END</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 1 -->
+<div class="sh">Lab 1 — LED Blinking using 8051</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#0d2a0d;color:var(--green)">1</div>
+    <div><div class="card-title">Lab 1 — LED Blinking using 8051</div><div class="card-sub">Toggle P1.0 every 500ms using software delay</div></div>
+    <div class="tags"><span class="tag" style="background:#0d2a0d;color:var(--green)">Assembly</span><span class="tag" style="background:#1f0a00;color:var(--orange)">Embedded C</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit + Concept</div>
+      <div class="ckt">P1.0 ──[330Ω]──▶|── GND
+When P1.0=1 → current flows → LED ON
+When P1.0=0 → no current   → LED OFF</div>
+      <div class="st o" style="margin-top:8px">Assembly Code</div>
+      <pre class="asm">      ORG   0000H
+      LJMP  MAIN         ; skip vector table
+
+      ORG   0030H        ; safe area
+MAIN:
+      MOV   SP, #50H     ; set stack pointer
+
+LOOP:
+      SETB  P1.0         ; P1.0 = 1 → LED ON
+      LCALL DELAY        ; wait 500ms
+      CLR   P1.0         ; P1.0 = 0 → LED OFF
+      LCALL DELAY        ; wait 500ms
+      SJMP  LOOP         ; repeat forever
+
+; Delay ~500ms at 12MHz
+; Inner: 250 x 2us = 500us
+; Middle: 250 x 500us = 125ms
+; Outer: 4 x 125ms = 500ms
+DELAY:
+      MOV   R5, #4
+OUTER:MOV   R6, #250
+MID:  MOV   R7, #250
+INNR: DJNZ  R7, INNR
+      DJNZ  R6, MID
+      DJNZ  R5, OUTER
+      RET
+      END</pre>
+    </div>
+    <div class="col">
+      <div class="st o">Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="r">sbit</span> LED = P1^<span class="n">0</span>;   <span class="c">// P1.0 = LED pin</span>
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">unsigned int</span> ms) {
+    <span class="t">unsigned int</span> i, j;
+    <span class="k">for</span>(i=<span class="n">0</span>; i&lt;ms; i++)
+        <span class="k">for</span>(j=<span class="n">0</span>; j&lt;<span class="n">125</span>; j++);
+}
+
+<span class="k">void</span> <span class="f">main</span>() {
+    <span class="k">while</span>(<span class="n">1</span>) {
+        LED = <span class="n">1</span>;          <span class="c">// LED ON</span>
+        <span class="f">delay_ms</span>(<span class="n">500</span>);
+        LED = <span class="n">0</span>;          <span class="c">// LED OFF</span>
+        <span class="f">delay_ms</span>(<span class="n">500</span>);
+    }
+}</pre>
+      <div class="st p" style="margin-top:8px">Variations (exam may ask)</div>
+      <pre><span class="c">// All 8 LEDs blink</span>
+<span class="k">void</span> <span class="f">main</span>(){
+    <span class="k">while</span>(<span class="n">1</span>){ P1=<span class="n">0xFF</span>; <span class="f">delay_ms</span>(<span class="n">500</span>); P1=<span class="n">0x00</span>; <span class="f">delay_ms</span>(<span class="n">500</span>); }
+}
+
+<span class="c">// Running light across P1.0-P1.7</span>
+<span class="k">void</span> <span class="f">main</span>(){
+    <span class="t">unsigned char</span> pat = <span class="n">0x01</span>;
+    <span class="k">while</span>(<span class="n">1</span>){
+        P1 = pat;
+        <span class="f">delay_ms</span>(<span class="n">200</span>);
+        pat = pat &lt;&lt; <span class="n">1</span>;       <span class="c">// shift left</span>
+        <span class="k">if</span>(pat == <span class="n">0</span>) pat = <span class="n">0x01</span>; <span class="c">// wrap</span>
+    }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 2 + 3.1 -->
+<div class="sh">Lab 2 + Lab 3.1 — LCD Display using 8051</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#1a0a2a;color:var(--purple)">2</div>
+    <div><div class="card-title">Lab 2 / 3.1 — LCD Display (Embedded C + Assembly)</div><div class="card-sub">Display characters and strings on 16×2 HD44780 LCD</div></div>
+    <div class="tags"><span class="tag" style="background:#1a0a2a;color:var(--purple)">P1=Data</span><span class="tag" style="background:#0d2a0d;color:var(--green)">P2=Control</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit</div>
+      <div class="ckt">LCD D0-D7 ──► P1.0 to P1.7  (data bus)
+LCD RS    ──► P2.0           (0=command 1=data)
+LCD RW    ──► GND            (always writing)
+LCD EN    ──► P2.1           (pulse to latch)
+LCD VCC   ──► +5V
+LCD VEE   ──► Potentiometer  (contrast)</div>
+      <div class="st o" style="margin-top:8px">LCD Commands — Memorize</div>
+      <table>
+        <tr><th>Hex</th><th>Effect</th></tr>
+        <tr><td class="mono cy">0x38</td><td>Init: 8-bit, 2 lines, 5×8 font</td></tr>
+        <tr><td class="mono cy">0x0C</td><td>Display ON, cursor OFF</td></tr>
+        <tr><td class="mono cy">0x06</td><td>Cursor moves right automatically</td></tr>
+        <tr><td class="mono or">0x01</td><td>Clear screen (wait 5ms after!)</td></tr>
+        <tr><td class="mono cy">0x80</td><td>Line 1, Column 0</td></tr>
+        <tr><td class="mono cy">0xC0</td><td>Line 2, Column 0</td></tr>
+        <tr><td class="mono">0x80+n</td><td>Line 1, column n</td></tr>
+        <tr><td class="mono">0xC0+n</td><td>Line 2, column n</td></tr>
+      </table>
+      <div class="st p" style="margin-top:8px">Lab 3.1 — Assembly Code</div>
+      <pre class="asm">; LCD — Data=P1, RS=P2.0, EN=P2.1
+      ORG   0000H
+      LJMP  MAIN
+      ORG   0030H
+MAIN: MOV   SP, #50H
+      LCALL LCD_INIT
+      MOV   A, #80H     ; line 1
+      LCALL LCD_CMD
+      MOV   A, #'H'
+      LCALL LCD_DATA
+      MOV   A, #'I'
+      LCALL LCD_DATA
+      MOV   A, #0C0H    ; line 2
+      LCALL LCD_CMD
+      MOV   A, #'8'
+      LCALL LCD_DATA
+      MOV   A, #'0'
+      LCALL LCD_DATA
+      MOV   A, #'5'
+      LCALL LCD_DATA
+      MOV   A, #'1'
+      LCALL LCD_DATA
+DONE: SJMP  DONE
+
+LCD_INIT:
+      MOV A,#38H  &  LCALL LCD_CMD
+      MOV A,#0CH  &  LCALL LCD_CMD
+      MOV A,#06H  &  LCALL LCD_CMD
+      MOV A,#01H  &  LCALL LCD_CMD
+      RET
+
+LCD_CMD:                ; A = command byte
+      MOV   P1, A       ; put on data bus
+      CLR   P2.0        ; RS=0 (command)
+      SETB  P2.1        ; EN=1
+      LCALL SDLY
+      CLR   P2.1        ; EN=0 ← reads here
+      LCALL SDLY
+      RET
+
+LCD_DATA:               ; A = character
+      MOV   P1, A
+      SETB  P2.0        ; RS=1 (data)
+      SETB  P2.1
+      LCALL SDLY
+      CLR   P2.1
+      LCALL SDLY
+      RET
+
+SDLY: MOV R7,#250
+S1:   DJNZ R7,S1
+      RET
+      END</pre>
+    </div>
+    <div class="col">
+      <div class="st o">Lab 2 — Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="r">sbit</span> RS = P2^<span class="n">0</span>;  <span class="c">// Register Select</span>
+<span class="r">sbit</span> EN = P2^<span class="n">1</span>;  <span class="c">// Enable</span>
+<span class="c">// Data bus = P1 (all 8 bits)</span>
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">unsigned int</span> ms){
+    <span class="t">unsigned int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++) <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">125</span>;j++);
+}
+
+<span class="c">// Pulse EN to make LCD latch the data</span>
+<span class="k">void</span> <span class="f">pulse_en</span>() {
+    EN = <span class="n">1</span>;          <span class="c">// EN HIGH</span>
+    <span class="f">delay_ms</span>(<span class="n">1</span>);
+    EN = <span class="n">0</span>;          <span class="c">// EN LOW ← LCD reads here</span>
+    <span class="f">delay_ms</span>(<span class="n">2</span>);
+}
+
+<span class="c">// Send a COMMAND (RS=0)</span>
+<span class="k">void</span> <span class="f">lcd_cmd</span>(<span class="t">unsigned char</span> cmd) {
+    P1 = cmd;        <span class="c">// put command on data bus</span>
+    RS = <span class="n">0</span>;          <span class="c">// RS=0 → command mode</span>
+    <span class="f">pulse_en</span>();
+}
+
+<span class="c">// Send a CHARACTER (RS=1)</span>
+<span class="k">void</span> <span class="f">lcd_char</span>(<span class="t">unsigned char</span> ch) {
+    P1 = ch;
+    RS = <span class="n">1</span>;          <span class="c">// RS=1 → data mode</span>
+    <span class="f">pulse_en</span>();
+}
+
+<span class="c">// Print a whole string</span>
+<span class="k">void</span> <span class="f">lcd_print</span>(<span class="t">char</span> *str) {
+    <span class="k">while</span>(*str)
+        <span class="f">lcd_char</span>(*str++);
+}
+
+<span class="c">// Initialize LCD — always call first</span>
+<span class="k">void</span> <span class="f">lcd_init</span>() {
+    <span class="f">lcd_cmd</span>(<span class="n">0x38</span>);   <span class="c">// 8-bit, 2-line</span>
+    <span class="f">lcd_cmd</span>(<span class="n">0x0C</span>);   <span class="c">// display ON</span>
+    <span class="f">lcd_cmd</span>(<span class="n">0x06</span>);   <span class="c">// cursor right</span>
+    <span class="f">lcd_cmd</span>(<span class="n">0x01</span>);   <span class="c">// clear screen</span>
+    <span class="f">delay_ms</span>(<span class="n">5</span>);     <span class="c">// clear needs extra time</span>
+}
+
+<span class="k">void</span> <span class="f">main</span>() {
+    <span class="f">lcd_init</span>();
+
+    <span class="f">lcd_cmd</span>(<span class="n">0x80</span>);           <span class="c">// go to line 1</span>
+    <span class="f">lcd_print</span>(<span class="s">"HELLO WORLD"</span>);
+
+    <span class="f">lcd_cmd</span>(<span class="n">0xC0</span>);           <span class="c">// go to line 2</span>
+    <span class="f">lcd_print</span>(<span class="s">"8051 EMBEDDED"</span>);
+
+    <span class="k">while</span>(<span class="n">1</span>);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 3.2 -->
+<div class="sh">Lab 3.2 — 8051 Serial Transmission in Embedded C</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#1a0a2a;color:var(--purple)">3</div>
+    <div><div class="card-title">Lab 3.2 — Serial Transmission (UART)</div><div class="card-sub">Send and receive bytes at 9600 baud using Timer1 Mode2</div></div>
+    <div class="tags"><span class="tag" style="background:#1a0a2a;color:var(--purple)">SCON SBUF</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit + Key Facts</div>
+      <div class="ckt">P3.1 (TXD) ──► MAX232 ──► PC serial port
+P3.0 (RXD) ◄── MAX232 ◄── PC serial port
+
+Setup: TMOD=0x20, TH1=0xFD, SCON=0x50, TR1=1
+Crystal: 11.0592 MHz for exact 9600 baud</div>
+      <ul class="steps">
+        <li><span class="sn">TMOD</span><span class="st2">0x20 = Timer1, Mode2 (8-bit auto-reload)</span></li>
+        <li><span class="sn">TH1</span><span class="st2">0xFD = reload value for 9600 baud @ 11.0592MHz</span></li>
+        <li><span class="sn">SCON</span><span class="st2">0x50 = Mode1 UART (8-bit), REN=1 (receive enabled)</span></li>
+        <li><span class="sn">TR1</span><span class="st2">Start Timer1 = baud rate generator</span></li>
+        <li><span class="sn">TI</span><span class="st2">Goes HIGH when TX complete — MUST clear after</span></li>
+        <li><span class="sn">RI</span><span class="st2">Goes HIGH when byte received — MUST clear after</span></li>
+      </ul>
+      <div class="info rd"><span>⚠</span><span>If you forget <b>TI=0</b> or <b>RI=0</b>, the UART locks up on the next byte — flags never get cleared again.</span></div>
+    </div>
+    <div class="col">
+      <div class="st o">Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="c">// Initialize UART at 9600 baud</span>
+<span class="k">void</span> <span class="f">serial_init</span>() {
+    TMOD = <span class="n">0x20</span>;  <span class="c">// Timer1, Mode2 (auto-reload)</span>
+    TH1  = <span class="n">0xFD</span>;  <span class="c">// 9600 baud @ 11.0592MHz</span>
+    SCON = <span class="n">0x50</span>;  <span class="c">// Mode1 UART, receive enabled</span>
+    TR1  = <span class="n">1</span>;     <span class="c">// start Timer1</span>
+}
+
+<span class="c">// Send one character</span>
+<span class="k">void</span> <span class="f">send_char</span>(<span class="t">unsigned char</span> ch) {
+    SBUF = ch;          <span class="c">// load into TX buffer</span>
+    <span class="k">while</span>(TI == <span class="n">0</span>);    <span class="c">// wait until TX done</span>
+    TI   = <span class="n">0</span>;          <span class="c">// MUST clear TI flag!</span>
+}
+
+<span class="c">// Send a string</span>
+<span class="k">void</span> <span class="f">send_string</span>(<span class="t">char</span> *str) {
+    <span class="k">while</span>(*str)
+        <span class="f">send_char</span>(*str++);
+}
+
+<span class="c">// Receive one character (blocking)</span>
+<span class="t">unsigned char</span> <span class="f">recv_char</span>() {
+    <span class="t">unsigned char</span> ch;
+    <span class="k">while</span>(RI == <span class="n">0</span>);    <span class="c">// wait until received</span>
+    ch = SBUF;          <span class="c">// read received byte</span>
+    RI  = <span class="n">0</span>;           <span class="c">// MUST clear RI flag!</span>
+    <span class="k">return</span> ch;
+}
+
+<span class="k">void</span> <span class="f">main</span>() {
+    <span class="t">unsigned char</span> received;
+
+    <span class="f">serial_init</span>();
+
+    <span class="f">send_string</span>(<span class="s">"Hello from 8051!\r\n"</span>);
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        received = <span class="f">recv_char</span>();    <span class="c">// wait for byte</span>
+        <span class="f">send_char</span>(received);       <span class="c">// echo it back</span>
+    }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 4.1 -->
+<div class="sh">Lab 4.1 — Controlling LEDs connected to 8051</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#0d1f3c;color:var(--cyan)">4</div>
+    <div><div class="card-title">Lab 4.1 — LED Control (Patterns + Input)</div><div class="card-sub">Control LEDs with different patterns; read a switch to control LED</div></div>
+    <div class="tags"><span class="tag" style="background:#0d1f3c;color:var(--cyan)">P1 OUTPUT</span><span class="tag" style="background:#2d1f00;color:var(--yellow)">P2 INPUT</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit</div>
+      <div class="ckt">LEDs on P1.0 to P1.7 (each with 330Ω to GND)
+Switch on P2.0 → GND (active LOW: pressed=0)
+
+P2.0 ──┬── VCC (pull-up inside port)
+       └── Switch ── GND</div>
+      <div class="st o" style="margin-top:8px">Embedded C — LED Patterns</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+<span class="r">sbit</span> SW = P2^<span class="n">0</span>;  <span class="c">// switch input</span>
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">unsigned int</span> ms){
+    <span class="t">unsigned int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++) <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">125</span>;j++);
+}
+
+<span class="k">void</span> <span class="f">main</span>() {
+    P2 = <span class="n">0xFF</span>;   <span class="c">// release P2 for input</span>
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="c">// Pattern 1: alternating 10101010</span>
+        P1 = <span class="n">0xAA</span>;  <span class="f">delay_ms</span>(<span class="n">500</span>);
+        <span class="c">// Pattern 2: alternating 01010101</span>
+        P1 = <span class="n">0x55</span>;  <span class="f">delay_ms</span>(<span class="n">500</span>);
+    }
+}</pre>
+    </div>
+    <div class="col">
+      <div class="st o">Switch Controls LED</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="r">sbit</span> LED    = P1^<span class="n">0</span>;  <span class="c">// LED output</span>
+<span class="r">sbit</span> BUTTON = P2^<span class="n">0</span>;  <span class="c">// switch input</span>
+
+<span class="k">void</span> <span class="f">main</span>() {
+    P2 = <span class="n">0xFF</span>;          <span class="c">// release P2 for input</span>
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="k">if</span>(BUTTON == <span class="n">0</span>) { <span class="c">// button pressed (LOW)</span>
+            LED = <span class="n">1</span>;       <span class="c">// turn LED ON</span>
+        } <span class="k">else</span> {
+            LED = <span class="n">0</span>;       <span class="c">// turn LED OFF</span>
+        }
+    }
+}</pre>
+      <div class="st b" style="margin-top:8px">Read P1.7, Send to P1.0 (Bit copy)</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="r">sbit</span> INPUT_BIT  = P1^<span class="n">7</span>;  <span class="c">// read from P1.7</span>
+<span class="r">sbit</span> OUTPUT_BIT = P1^<span class="n">0</span>;  <span class="c">// send to P1.0</span>
+
+<span class="k">void</span> <span class="f">main</span>() {
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="c">// Copy bit from P1.7 to P1.0</span>
+        OUTPUT_BIT = INPUT_BIT;
+    }
+}</pre>
+      <div class="info bl"><span>💡</span><span>This exact pattern (P1.7 → P1.0) is required in Lab 5.2 along with the square wave.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 4.2 -->
+<div class="sh">Lab 4.2 — Interrupt Programming (Program 1)</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#2d0d0d;color:var(--red)">5</div>
+    <div><div class="card-title">Lab 4.2 — External Interrupt INT0 (Program 1)</div><div class="card-sub">Button on P3.2 triggers INT0 — toggle LED on each press</div></div>
+    <div class="tags"><span class="tag" style="background:#2d0d0d;color:var(--red)">interrupt 0</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit + Concept</div>
+      <div class="ckt">Button ── P3.2 (INT0) ── GND
+LED    ── P1.0 ── 330Ω ── GND
+
+Button pressed → P3.2 goes LOW (falling edge)
+→ INT0 fires → ISR runs → LED toggles</div>
+      <ul class="steps">
+        <li><span class="sn">IT0=1</span><span class="st2">Edge triggered — fires on falling edge (HIGH→LOW)</span></li>
+        <li><span class="sn">IT0=0</span><span class="st2">Level triggered — fires while pin stays LOW</span></li>
+        <li><span class="sn">EX0=1</span><span class="st2">Enable INT0 interrupt</span></li>
+        <li><span class="sn">EA=1</span><span class="st2">Master enable — MUST be 1 for any interrupt to fire</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st o">Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="r">sbit</span> LED = P1^<span class="n">0</span>;  <span class="c">// LED output</span>
+
+<span class="c">// INT0 ISR — runs every button press</span>
+<span class="k">void</span> <span class="f">int0_isr</span>() <span class="r">interrupt</span> <span class="n">0</span> {
+    LED = !LED;        <span class="c">// toggle LED</span>
+}
+
+<span class="k">void</span> <span class="f">main</span>() {
+    IT0 = <span class="n">1</span>;   <span class="c">// falling edge triggered</span>
+    EX0 = <span class="n">1</span>;   <span class="c">// enable INT0</span>
+    EA  = <span class="n">1</span>;   <span class="c">// global interrupt enable</span>
+
+    <span class="k">while</span>(<span class="n">1</span>);  <span class="c">// ISR handles everything</span>
+}</pre>
+      <div class="st b" style="margin-top:8px">Assembly Version</div>
+      <pre class="asm">      ORG  0000H
+      LJMP MAIN
+      ORG  0003H      ; INT0 vector
+      LJMP INT0_ISR
+      ORG  0030H
+MAIN:
+      SETB IT0       ; edge triggered
+      SETB EX0       ; enable INT0
+      SETB EA        ; global enable
+LOOP: SJMP LOOP      ; wait
+
+INT0_ISR:
+      CPL  P1.0      ; toggle LED
+      RETI
+      END</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 5.1 -->
+<div class="sh">Lab 5.1 — Interrupt Driven LED and LCD Operations</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#2d1f00;color:var(--yellow)">6</div>
+    <div><div class="card-title">Lab 5.1 — Timer Interrupt → LED + LCD Update</div><div class="card-sub">Timer0 interrupt blinks LED every 50ms; LCD shows a counter</div></div>
+    <div class="tags"><span class="tag" style="background:#2d1f00;color:var(--yellow)">interrupt 1</span><span class="tag" style="background:#1a0a2a;color:var(--purple)">LCD</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit</div>
+      <div class="ckt">LED  ── P1.0 ── 330Ω ── GND
+LCD Data  = P1 (P1.0-P1.7)
+LCD RS    = P2.0,  EN = P2.1
+(LED shares P1.0 with LCD data — if your
+ circuit separates them, adjust pin)</div>
+      <div class="st o" style="margin-top:8px">Concept</div>
+      <ul class="steps">
+        <li><span class="sn">Timer</span><span class="st2">Timer0 fires every 50ms → ISR runs</span></li>
+        <li><span class="sn">ISR</span><span class="st2">Toggle LED + increment counter</span></li>
+        <li><span class="sn">Main</span><span class="st2">Display counter value on LCD continuously</span></li>
+        <li><span class="sn">Key</span><span class="st2">LED and LCD update simultaneously without polling</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st o">Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="r">sbit</span> LED = P1^<span class="n">0</span>;
+<span class="r">sbit</span> RS  = P2^<span class="n">0</span>;
+<span class="r">sbit</span> EN  = P2^<span class="n">1</span>;
+<span class="t">unsigned int</span> count = <span class="n">0</span>;
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">unsigned int</span> ms){<span class="t">unsigned int</span> i,j;<span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++)<span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">125</span>;j++);}
+<span class="k">void</span> <span class="f">pulse_en</span>(){EN=<span class="n">1</span>;<span class="f">delay_ms</span>(<span class="n">1</span>);EN=<span class="n">0</span>;<span class="f">delay_ms</span>(<span class="n">2</span>);}
+<span class="k">void</span> <span class="f">lcd_cmd</span>(<span class="t">unsigned char</span> c){P1=c;RS=<span class="n">0</span>;<span class="f">pulse_en</span>();}
+<span class="k">void</span> <span class="f">lcd_char</span>(<span class="t">unsigned char</span> c){P1=c;RS=<span class="n">1</span>;<span class="f">pulse_en</span>();}
+<span class="k">void</span> <span class="f">lcd_init</span>(){<span class="f">lcd_cmd</span>(<span class="n">0x38</span>);<span class="f">lcd_cmd</span>(<span class="n">0x0C</span>);<span class="f">lcd_cmd</span>(<span class="n">0x06</span>);<span class="f">lcd_cmd</span>(<span class="n">0x01</span>);<span class="f">delay_ms</span>(<span class="n">5</span>);}
+
+<span class="k">void</span> <span class="f">lcd_number</span>(<span class="t">unsigned int</span> n) {
+    <span class="t">unsigned char</span> buf[<span class="n">6</span>]; <span class="t">int</span> i=<span class="n">0</span>;
+    <span class="k">if</span>(n==<span class="n">0</span>){<span class="f">lcd_char</span>(<span class="s">'0'</span>);<span class="k">return</span>;}
+    <span class="k">while</span>(n&gt;<span class="n">0</span>){buf[i++]=(n%<span class="n">10</span>)+<span class="s">'0'</span>;n/=<span class="n">10</span>;}
+    <span class="k">for</span>(i--;i&gt;=<span class="n">0</span>;i--) <span class="f">lcd_char</span>(buf[i]);
+}
+
+<span class="c">// Timer0 ISR — fires every 50ms</span>
+<span class="k">void</span> <span class="f">timer0_isr</span>() <span class="r">interrupt</span> <span class="n">1</span> {
+    TH0 = <span class="n">0x3C</span>; TL0 = <span class="n">0xB0</span>; <span class="c">// reload 50ms</span>
+    LED = !LED;
+    count++;
+    <span class="k">if</span>(count &gt; <span class="n">9999</span>) count = <span class="n">0</span>;
+}
+
+<span class="k">void</span> <span class="f">main</span>() {
+    <span class="f">lcd_init</span>();
+    TMOD = <span class="n">0x01</span>; TH0=<span class="n">0x3C</span>; TL0=<span class="n">0xB0</span>;
+    ET0=<span class="n">1</span>; EA=<span class="n">1</span>; TR0=<span class="n">1</span>;
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="f">lcd_cmd</span>(<span class="n">0x80</span>);
+        <span class="f">lcd_char</span>(<span class="s">'C'</span>);<span class="f">lcd_char</span>(<span class="s">'N'</span>);<span class="f">lcd_char</span>(<span class="s">'T'</span>);<span class="f">lcd_char</span>(<span class="s">':'</span>);
+        <span class="f">lcd_number</span>(count);
+    }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 5.2 -->
+<div class="sh">Lab 5.2 — Interrupt Program 3 + Completion Requirement</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#2d0d0d;color:var(--red)">7</div>
+    <div><div class="card-title">Lab 5.2 — P1.7→P1.0 + 100µs Square Wave on P2.5</div><div class="card-sub">Continuously copy bit P1.7 to P1.0 WHILE generating 100µs square wave on P2.5 using Timer0 Mode2. XTAL=11.0592MHz</div></div>
+    <div class="tags"><span class="tag" style="background:#2d0d0d;color:var(--red)">Timer0 Mode2</span><span class="tag" style="background:#2d1f00;color:var(--yellow)">interrupt 1</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Problem Breakdown</div>
+      <div class="ckt">Task 1: P1.7 → P1.0 (bit copy, continuously)
+Task 2: Square wave on P2.5
+  → Period = 100µs
+  → HIGH for 50µs, LOW for 50µs
+  → Toggle P2.5 every 50µs</div>
+      <div class="st o" style="margin-top:8px">Timer Calculation</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:10px;font-family:var(--mono);font-size:11px;line-height:2">
+        <span class="cy">XTAL = 11.0592 MHz</span><br>
+        <span class="mu">Machine cycle = 12 / 11.0592MHz = 1.0851µs</span><br>
+        <span class="mu">Need 50µs delay → count = 50 / 1.0851 = 46</span><br>
+        <span class="mu">Mode2 preload = 256 − 46 = 210 = 0xD2</span><br>
+        <span class="gr">TH0 = 0xD2, TL0 = 0xD2</span><br>
+        <span class="mu">Timer overflows every 46 cycles = ~50µs</span><br>
+        <span class="mu">ISR toggles P2.5 every 50µs</span><br>
+        <span class="cy">Result: 50µs HIGH + 50µs LOW = 100µs period ✓</span>
+      </div>
+      <div class="st b" style="margin-top:8px">Mode2 (8-bit Auto-Reload)</div>
+      <ul class="steps">
+        <li><span class="sn">TH0</span><span class="st2">Holds the reload value — loaded into TL0 at each overflow</span></li>
+        <li><span class="sn">TL0</span><span class="st2">Counts up. On overflow → auto-reloads from TH0. No need to reload manually!</span></li>
+        <li><span class="sn">Adv</span><span class="st2">Much more precise than Mode1 (no reload delay)</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st o">Complete Embedded C Code (Lab 5.2 Submission)</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="r">sbit</span> INPUT_BIT    = P1^<span class="n">7</span>;  <span class="c">// read from P1.7</span>
+<span class="r">sbit</span> OUTPUT_BIT   = P1^<span class="n">0</span>;  <span class="c">// send to P1.0</span>
+<span class="r">sbit</span> SQUARE_WAVE  = P2^<span class="n">5</span>;  <span class="c">// square wave output</span>
+
+<span class="c">// Timer0 ISR — fires every ~50µs
+// Toggles P2.5 → creates 100µs square wave</span>
+<span class="k">void</span> <span class="f">timer0_isr</span>() <span class="r">interrupt</span> <span class="n">1</span> {
+    <span class="c">// Mode2 auto-reloads TH0 into TL0
+    // No need to reload manually</span>
+    SQUARE_WAVE = !SQUARE_WAVE; <span class="c">// toggle P2.5</span>
+}
+
+<span class="k">void</span> <span class="f">main</span>() {
+
+    <span class="c">// Setup Timer0, Mode2 (8-bit auto-reload)
+    // TMOD = 0x02 → Timer0, Mode2</span>
+    TMOD = <span class="n">0x02</span>;
+
+    <span class="c">// Preload = 256 - 46 = 210 = 0xD2
+    // Both TH0 and TL0 get the same value</span>
+    TH0  = <span class="n">0xD2</span>;  <span class="c">// reload value</span>
+    TL0  = <span class="n">0xD2</span>;  <span class="c">// starting value</span>
+
+    <span class="c">// Enable Timer0 interrupt</span>
+    ET0  = <span class="n">1</span>;     <span class="c">// enable Timer0 interrupt</span>
+    EA   = <span class="n">1</span>;     <span class="c">// global interrupt enable</span>
+    TR0  = <span class="n">1</span>;     <span class="c">// start Timer0</span>
+
+    <span class="c">// Main loop: continuously copy P1.7 to P1.0
+    // Timer ISR handles square wave in background</span>
+    <span class="k">while</span>(<span class="n">1</span>) {
+        OUTPUT_BIT = INPUT_BIT; <span class="c">// copy bit P1.7→P1.0</span>
+    }
+}</pre>
+      <div class="info gn"><span>✅</span><span>The main loop copies bits continuously. Timer interrupt runs every 50µs in the background to toggle the square wave. They work simultaneously.</span></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end 8051 page -->
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- ARM LABS PAGE -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="pg-arm" class="page">
+
+<!-- HOW LPC2148 C WORKS -->
+<div class="sh">LPC2148 Embedded C — Before Every Lab</div>
+<div class="card">
+  <div class="card-head"><div class="lab-num" style="background:#0d1f3c;color:var(--cyan)">!</div><div><div class="card-title">LPC2148 Program Template — Always Use This</div></div></div>
+  <div class="g2">
+    <div class="col">
+      <div class="st b">Template</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>  <span class="c">// always first</span>
+
+<span class="c">// Name your pins with #define</span>
+<span class="d">#define</span> <span class="r">LED</span>    (<span class="n">1</span>&lt;&lt;<span class="n">10</span>)  <span class="c">// P0.10</span>
+<span class="d">#define</span> <span class="r">LED2</span>   (<span class="n">1</span>&lt;&lt;<span class="n">11</span>)  <span class="c">// P0.11</span>
+<span class="d">#define</span> <span class="r">RS</span>     (<span class="n">1</span>&lt;&lt;<span class="n">8</span>)   <span class="c">// P0.8</span>
+<span class="d">#define</span> <span class="r">EN</span>     (<span class="n">1</span>&lt;&lt;<span class="n">9</span>)   <span class="c">// P0.9</span>
+<span class="d">#define</span> <span class="r">DATA</span>   <span class="n">0xFF</span>     <span class="c">// P0.0-P0.7</span>
+
+<span class="c">// Software delay ~1ms per ms count</span>
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms) {
+    <span class="t">int</span> i, j;
+    <span class="k">for</span>(i=<span class="n">0</span>; i&lt;ms; i++)
+        <span class="k">for</span>(j=<span class="n">0</span>; j&lt;<span class="n">6000</span>; j++);
+}
+
+<span class="k">int</span> <span class="f">main</span>() {
+    <span class="c">// Step 1: PINSEL — set GPIO</span>
+    PINSEL0 = <span class="n">0x00000000</span>;
+
+    <span class="c">// Step 2: IO0DIR — set direction</span>
+    IO0DIR |= <span class="r">LED</span>;   <span class="c">// output</span>
+
+    <span class="c">// Step 3: Loop</span>
+    <span class="k">while</span>(<span class="n">1</span>) {
+        IO0SET = <span class="r">LED</span>;    <span class="c">// HIGH</span>
+        <span class="f">delay_ms</span>(<span class="n">500</span>);
+        IO0CLR = <span class="r">LED</span>;    <span class="c">// LOW</span>
+        <span class="f">delay_ms</span>(<span class="n">500</span>);
+    }
+}</pre>
+    </div>
+    <div class="col">
+      <div class="st o">Key GPIO Rules</div>
+      <pre><span class="c">// IO0SET: writing 1 drives pin HIGH
+//         writing 0 has NO effect
+// IO0CLR: writing 1 drives pin LOW
+//         writing 0 has NO effect
+
+// Set pin HIGH:
+IO0SET = (<span class="n">1</span>&lt;&lt;pin);
+
+// Set pin LOW:
+IO0CLR = (<span class="n">1</span>&lt;&lt;pin);
+
+// Toggle:
+IO0PIN ^= (<span class="n">1</span>&lt;&lt;pin);
+
+// Read pin:
+<span class="k">if</span>(IO0PIN &amp; (<span class="n">1</span>&lt;&lt;pin)) { <span class="c">/* HIGH */</span> }
+
+// Multiple pins at once:
+IO0SET = (<span class="n">1</span>&lt;&lt;<span class="n">10</span>)|(<span class="n">1</span>&lt;&lt;<span class="n">11</span>);  <span class="c">// two pins</span>
+IO0DIR = <span class="n">0xFFFFFFFF</span>;        <span class="c">// ALL output</span>
+IO0SET = <span class="n">0xFFFFFFFF</span>;        <span class="c">// ALL HIGH</span></pre>
+      <div class="info or"><span>⚠</span><span>Never write IO0SET=0 to turn off a pin. It does nothing. Use <b>IO0CLR</b> to pull LOW.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 6.1 + 6.2 -->
+<div class="sh">Lab 6.1 + 6.2 — LED Blinking in ARM (All 32 Pins + Assembly)</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#0d2a0d;color:var(--green)">8</div>
+    <div><div class="card-title">Lab 6.1 — LED Blinking ARM (Port 0 — All 32 pins)</div><div class="card-sub">Lab 6.2 — Same in Assembly. Both provided below.</div></div>
+    <div class="tags"><span class="tag" style="background:#0d2a0d;color:var(--green)">Assembly</span><span class="tag" style="background:#1f0a00;color:var(--orange)">Embedded C</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit (All 32 pins)</div>
+      <div class="ckt">P0.0  to P0.31 → each LED → 330Ω → GND
+OR: one LED on P0.10 for simple blink</div>
+      <div class="st o" style="margin-top:8px">Lab 6.2 — ARM Assembly Code</div>
+      <pre class="asm">; ARM Assembly — LED Blink on P0.10
+; Registers for LPC2148 GPIO Port 0
+IO0DIR  EQU  0xE0028008
+IO0SET  EQU  0xE0028004
+IO0CLR  EQU  0xE002800C
+PINSEL0 EQU  0xE002C000
+
+    AREA Reset, CODE, READONLY
+    ENTRY
+
+Start
+    ; Step 1: PINSEL0 = 0 (all GPIO)
+    LDR  R0, =PINSEL0
+    MOV  R1, #0
+    STR  R1, [R0]
+
+    ; Step 2: IO0DIR = all output
+    LDR  R0, =IO0DIR
+    MVN  R1, #0       ; R1 = 0xFFFFFFFF
+    STR  R1, [R0]
+
+    ; Store addresses for loop
+    LDR  R4, =IO0SET
+    LDR  R5, =IO0CLR
+
+Loop
+    ; All LEDs ON
+    MVN  R1, #0
+    STR  R1, [R4]     ; IO0SET = all 1s
+    BL   Delay
+
+    ; All LEDs OFF
+    MVN  R1, #0
+    STR  R1, [R5]     ; IO0CLR = all 1s
+    BL   Delay
+    B    Loop
+
+Delay
+    LDR  R7, =500000
+DLY SUBS R7, R7, #1
+    BNE  DLY
+    BX   LR
+
+    END</pre>
+    </div>
+    <div class="col">
+      <div class="st o">Lab 6.1 — Embedded C (All 32 pins)</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms){
+    <span class="t">int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++) <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">6000</span>;j++);
+}
+
+<span class="k">int</span> <span class="f">main</span>() {
+    <span class="c">// Step 1: All Port 0 pins = GPIO</span>
+    PINSEL0 = <span class="n">0x00000000</span>;
+    PINSEL1 = <span class="n">0x00000000</span>;  <span class="c">// P0.16-P0.31</span>
+
+    <span class="c">// Step 2: All Port 0 pins = OUTPUT</span>
+    IO0DIR = <span class="n">0xFFFFFFFF</span>;   <span class="c">// all 32 bits = output</span>
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="c">// Turn ALL 32 LEDs ON</span>
+        IO0SET = <span class="n">0xFFFFFFFF</span>;
+        <span class="f">delay_ms</span>(<span class="n">500</span>);
+
+        <span class="c">// Turn ALL 32 LEDs OFF</span>
+        IO0CLR = <span class="n">0xFFFFFFFF</span>;
+        <span class="f">delay_ms</span>(<span class="n">500</span>);
+    }
+}</pre>
+      <div class="st b" style="margin-top:8px">Single LED Blink (P0.10)</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>
+<span class="d">#define</span> <span class="r">LED</span> (<span class="n">1</span>&lt;&lt;<span class="n">10</span>)  <span class="c">// P0.10</span>
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms){<span class="t">int</span> i,j;<span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++)<span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">6000</span>;j++);}
+
+<span class="k">int</span> <span class="f">main</span>() {
+    PINSEL0 &amp;= ~(<span class="n">3</span>&lt;&lt;<span class="n">20</span>);  <span class="c">// P0.10 GPIO</span>
+    IO0DIR  |= <span class="r">LED</span>;        <span class="c">// output</span>
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        IO0SET = <span class="r">LED</span>;  <span class="f">delay_ms</span>(<span class="n">500</span>);
+        IO0CLR = <span class="r">LED</span>;  <span class="f">delay_ms</span>(<span class="n">500</span>);
+    }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 7.1 + 7.2 -->
+<div class="sh">Lab 7.1 + 7.2 — LCD Interfacing to ARM LPC2148</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#1a0a2a;color:var(--purple)">9</div>
+    <div><div class="card-title">Lab 7.1 / 7.2 — LCD with LPC2148 (Assembly + Embedded C)</div><div class="card-sub">Display text on 16×2 LCD — data on P0.0-P0.7, RS=P0.8, EN=P0.9</div></div>
+    <div class="tags"><span class="tag" style="background:#1a0a2a;color:var(--purple)">Assembly</span><span class="tag" style="background:#1f0a00;color:var(--orange)">Embedded C</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit</div>
+      <div class="ckt">LCD D0-D7  → P0.0 to P0.7  (data)
+LCD RS     → P0.8           (0=cmd 1=data)
+LCD EN     → P0.9           (pulse HIGH→LOW)
+LCD RW     → GND            (always write)
+LCD VCC    → 3.3V or 5V
+LCD VEE    → Potentiometer  (contrast)</div>
+      <div class="st o" style="margin-top:8px">Lab 7.1 — ARM Assembly</div>
+      <pre class="asm">; ARM Assembly — LCD on LPC2148
+; Data=P0.0-P0.7, RS=P0.8, EN=P0.9
+IO0DIR  EQU 0xE0028008
+IO0SET  EQU 0xE0028004
+IO0CLR  EQU 0xE002800C
+PINSEL0 EQU 0xE002C000
+RS_PIN  EQU 0x100       ; bit 8
+EN_PIN  EQU 0x200       ; bit 9
+
+    AREA code, CODE, READONLY
+    ENTRY
+Start
+    LDR R0,=PINSEL0
+    MOV R1,#0 &  STR R1,[R0]  ; all GPIO
+    LDR R0,=IO0DIR
+    MOV R1,#0x3FF &  STR R1,[R0] ; P0.0-P0.9 out
+    BL  LCD_INIT
+    ; go to line 1
+    MOV R0,#0x80  &  BL LCD_CMD
+    ; print 'H','I'
+    MOV R0,#'H'   &  BL LCD_DATA
+    MOV R0,#'I'   &  BL LCD_DATA
+    ; go to line 2
+    MOV R0,#0xC0  &  BL LCD_CMD
+    MOV R0,#'A'   &  BL LCD_DATA
+    MOV R0,#'R'   &  BL LCD_DATA
+    MOV R0,#'M'   &  BL LCD_DATA
+Loop B Loop
+
+LCD_INIT
+    STMFD SP!,{LR}
+    MOV R0,#0x38 &  BL LCD_CMD
+    MOV R0,#0x0C &  BL LCD_CMD
+    MOV R0,#0x06 &  BL LCD_CMD
+    MOV R0,#0x01 &  BL LCD_CMD
+    BL  Delay5ms
+    LDMFD SP!,{PC}
+
+LCD_CMD          ; R0 = command
+    STMFD SP!,{R1,R2,LR}
+    LDR R2,=IO0CLR
+    MOV R1,#0xFF &  STR R1,[R2]  ; clear data
+    LDR R2,=IO0SET
+    AND R1,R0,#0xFF &  STR R1,[R2] ; set cmd
+    LDR R2,=IO0CLR &  MOV R1,=RS_PIN &  STR R1,[R2] ; RS=0
+    LDR R2,=IO0SET &  MOV R1,=EN_PIN &  STR R1,[R2] ; EN=1
+    BL  SmallDly
+    LDR R2,=IO0CLR &  STR R1,[R2] ; EN=0
+    BL  SmallDly
+    LDMFD SP!,{R1,R2,PC}
+
+LCD_DATA         ; R0 = character
+    STMFD SP!,{R1,R2,LR}
+    LDR R2,=IO0CLR
+    MOV R1,#0xFF &  STR R1,[R2]
+    LDR R2,=IO0SET
+    AND R1,R0,#0xFF &  STR R1,[R2]
+    MOV R1,=RS_PIN &  STR R1,[R2] ; RS=1
+    MOV R1,=EN_PIN &  STR R1,[R2] ; EN=1
+    BL  SmallDly
+    LDR R2,=IO0CLR &  STR R1,[R2] ; EN=0
+    BL  SmallDly
+    LDMFD SP!,{R1,R2,PC}
+
+SmallDly  LDR R7,=10000
+SDL SUBS R7,R7,#1 &  BNE SDL &  BX LR
+Delay5ms  LDR R7,=50000
+D5  SUBS R7,R7,#1 &  BNE D5 &  BX LR
+    END</pre>
+    </div>
+    <div class="col">
+      <div class="st o">Lab 7.2 — Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>
+
+<span class="c">// Pin names</span>
+<span class="d">#define</span> <span class="r">RS</span>    (<span class="n">1</span>&lt;&lt;<span class="n">8</span>)   <span class="c">// P0.8</span>
+<span class="d">#define</span> <span class="r">EN</span>    (<span class="n">1</span>&lt;&lt;<span class="n">9</span>)   <span class="c">// P0.9</span>
+<span class="d">#define</span> <span class="r">DATA</span>  <span class="n">0xFF</span>    <span class="c">// P0.0-P0.7</span>
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms){
+    <span class="t">int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++) <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">6000</span>;j++);
+}
+
+<span class="c">// Pulse EN to latch data into LCD</span>
+<span class="k">void</span> <span class="f">pulse_en</span>() {
+    IO0SET = <span class="r">EN</span>;      <span class="c">// EN HIGH</span>
+    <span class="f">delay_ms</span>(<span class="n">1</span>);
+    IO0CLR = <span class="r">EN</span>;      <span class="c">// EN LOW ← LCD reads</span>
+    <span class="f">delay_ms</span>(<span class="n">2</span>);
+}
+
+<span class="c">// Send COMMAND to LCD (RS=0)</span>
+<span class="k">void</span> <span class="f">lcd_cmd</span>(<span class="t">unsigned char</span> cmd) {
+    IO0CLR = <span class="r">DATA</span>;           <span class="c">// clear data lines</span>
+    IO0SET = cmd &amp; <span class="r">DATA</span>;     <span class="c">// put command</span>
+    IO0CLR = <span class="r">RS</span>;             <span class="c">// RS=0 → command</span>
+    <span class="f">pulse_en</span>();
+}
+
+<span class="c">// Send CHARACTER to LCD (RS=1)</span>
+<span class="k">void</span> <span class="f">lcd_char</span>(<span class="t">unsigned char</span> ch) {
+    IO0CLR = <span class="r">DATA</span>;
+    IO0SET = ch &amp; <span class="r">DATA</span>;
+    IO0SET = <span class="r">RS</span>;             <span class="c">// RS=1 → data</span>
+    <span class="f">pulse_en</span>();
+}
+
+<span class="c">// Print whole string</span>
+<span class="k">void</span> <span class="f">lcd_print</span>(<span class="t">char</span> *str) {
+    <span class="k">while</span>(*str) <span class="f">lcd_char</span>(*str++);
+}
+
+<span class="c">// LCD startup — always call first</span>
+<span class="k">void</span> <span class="f">lcd_init</span>() {
+    <span class="f">lcd_cmd</span>(<span class="n">0x38</span>);  <span class="c">// 8-bit, 2-line</span>
+    <span class="f">lcd_cmd</span>(<span class="n">0x0C</span>);  <span class="c">// display ON</span>
+    <span class="f">lcd_cmd</span>(<span class="n">0x06</span>);  <span class="c">// cursor right</span>
+    <span class="f">lcd_cmd</span>(<span class="n">0x01</span>);  <span class="c">// clear screen</span>
+    <span class="f">delay_ms</span>(<span class="n">5</span>);
+}
+
+<span class="k">int</span> <span class="f">main</span>() {
+    <span class="c">// P0.0-P0.9 = GPIO outputs</span>
+    PINSEL0 = <span class="n">0x00000000</span>;
+    IO0DIR  = <span class="n">0x000003FF</span>;  <span class="c">// bits 0-9 output</span>
+
+    <span class="f">lcd_init</span>();
+
+    <span class="f">lcd_cmd</span>(<span class="n">0x80</span>);           <span class="c">// line 1</span>
+    <span class="f">lcd_print</span>(<span class="s">"HELLO LPC2148"</span>);
+
+    <span class="f">lcd_cmd</span>(<span class="n">0xC0</span>);           <span class="c">// line 2</span>
+    <span class="f">lcd_print</span>(<span class="s">"ARM7 EMBEDDED"</span>);
+
+    <span class="k">while</span>(<span class="n">1</span>);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 8.1 -->
+<div class="sh">Lab 8.1 — 7-Segment Display LPC2148</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#0d2a0d;color:var(--green)">10</div>
+    <div><div class="card-title">Lab 8.1 — 7-Segment Display and Displaying Numbers</div><div class="card-sub">Count 0–9 on 7-segment display connected to P0.0–P0.7</div></div>
+    <div class="tags"><span class="tag" style="background:#0d2a0d;color:var(--green)">GPIO</span><span class="tag" style="background:#2d1f00;color:var(--yellow)">Lookup Table</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit + Segment Map</div>
+      <div class="ckt"> ─ a ─         Bit  Segment  Pin
+|f   b|        bit0  a      P0.0
+ ─ g ─         bit1  b      P0.1
+|e   c|         bit2  c      P0.2
+ ─ d ─  .dp   bit3  d      P0.3
+               bit4  e      P0.4
+               bit5  f      P0.5
+               bit6  g      P0.6
+               bit7  dp     P0.7
+
+Common Cathode → GND
+Each segment → 330Ω → P0.x pin</div>
+      <div class="st o" style="margin-top:8px">Digit Codes (Common Cathode: 1=ON)</div>
+      <table>
+        <tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+        <tr><td class="mono cy">0x3F</td><td class="mono cy">0x06</td><td class="mono cy">0x5B</td><td class="mono cy">0x4F</td><td class="mono cy">0x66</td><td class="mono cy">0x6D</td><td class="mono cy">0x7D</td><td class="mono cy">0x07</td><td class="mono cy">0x7F</td><td class="mono cy">0x6F</td></tr>
+      </table>
+      <div class="info yw"><span>⚠</span><span>Common Anode: invert all codes. Use <code class="mono">0xFF & ~seg[d]</code></span></div>
+    </div>
+    <div class="col">
+      <div class="st o">Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>
+
+<span class="c">// Segment codes for 0 to 9 (common cathode)</span>
+<span class="t">unsigned char</span> seg[<span class="n">10</span>] = {
+    <span class="n">0x3F</span>, <span class="c">// 0</span>
+    <span class="n">0x06</span>, <span class="c">// 1</span>
+    <span class="n">0x5B</span>, <span class="c">// 2</span>
+    <span class="n">0x4F</span>, <span class="c">// 3</span>
+    <span class="n">0x66</span>, <span class="c">// 4</span>
+    <span class="n">0x6D</span>, <span class="c">// 5</span>
+    <span class="n">0x7D</span>, <span class="c">// 6</span>
+    <span class="n">0x07</span>, <span class="c">// 7</span>
+    <span class="n">0x7F</span>, <span class="c">// 8</span>
+    <span class="n">0x6F</span>  <span class="c">// 9</span>
+};
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms){
+    <span class="t">int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++) <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">6000</span>;j++);
+}
+
+<span class="c">// Show one digit (0-9) on display</span>
+<span class="k">void</span> <span class="f">show_digit</span>(<span class="t">int</span> d) {
+    IO0CLR = <span class="n">0xFF</span>;         <span class="c">// all segments off</span>
+    IO0SET = seg[d] &amp; <span class="n">0xFF</span>; <span class="c">// right segments on</span>
+}
+
+<span class="k">int</span> <span class="f">main</span>() {
+    <span class="c">// P0.0-P0.7 → GPIO outputs</span>
+    PINSEL0 = <span class="n">0x00000000</span>;
+    IO0DIR  = <span class="n">0x000000FF</span>;
+
+    <span class="t">int</span> d = <span class="n">0</span>;
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="f">show_digit</span>(d);    <span class="c">// show current digit</span>
+        <span class="f">delay_ms</span>(<span class="n">1000</span>);  <span class="c">// hold 1 second</span>
+        d++;
+        <span class="k">if</span>(d &gt; <span class="n">9</span>) d = <span class="n">0</span>; <span class="c">// wrap 9→0</span>
+    }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 8.2 -->
+<div class="sh">Lab 8.2 — Stepper Motor via ULN2003 Driver</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#1f0a00;color:var(--orange)">11</div>
+    <div><div class="card-title">Lab 8.2 — Unipolar Stepper Motor</div><div class="card-sub">Rotate clockwise and anticlockwise using full-step sequence via ULN2003</div></div>
+    <div class="tags"><span class="tag" style="background:#1f0a00;color:var(--orange)">GPIO</span><span class="tag" style="background:#0d2a0d;color:var(--green)">Sequence</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit</div>
+      <div class="ckt">LPC2148    ULN2003        Stepper Motor
+P0.0 ───── IN1 ──────── Coil A
+P0.1 ───── IN2 ──────── Coil B
+P0.2 ───── IN3 ──────── Coil C
+P0.3 ───── IN4 ──────── Coil D
+GND  ───── GND
+           COM ──────── +12V (motor supply)
+
+ULN2003 amplifies GPIO 4mA → 500mA for motor</div>
+      <div class="st o" style="margin-top:8px">Full Step Sequence</div>
+      <table>
+        <tr><th>Step</th><th>D(bit3)</th><th>C(bit2)</th><th>B(bit1)</th><th>A(bit0)</th><th>Hex</th></tr>
+        <tr><td>1</td><td class="cy">1</td><td>0</td><td>0</td><td class="cy">1</td><td class="mono cy">0x09</td></tr>
+        <tr><td>2</td><td>0</td><td>0</td><td class="cy">1</td><td class="cy">1</td><td class="mono cy">0x03</td></tr>
+        <tr><td>3</td><td>0</td><td class="cy">1</td><td class="cy">1</td><td>0</td><td class="mono cy">0x06</td></tr>
+        <tr><td>4</td><td class="cy">1</td><td class="cy">1</td><td>0</td><td>0</td><td class="mono cy">0x0C</td></tr>
+      </table>
+      <ul class="steps" style="margin-top:8px">
+        <li><span class="sn">CW</span><span class="st2">Forward: 0x09 → 0x03 → 0x06 → 0x0C → repeat</span></li>
+        <li><span class="sn">CCW</span><span class="st2">Reverse: 0x0C → 0x06 → 0x03 → 0x09 → repeat</span></li>
+        <li><span class="sn">Speed</span><span class="st2">delay=5ms fast, delay=20ms slow. Min ~2ms</span></li>
+        <li><span class="sn">1 rev</span><span class="st2">200 steps = 360° (1.8° per step)</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st o">Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>
+
+<span class="d">#define</span> <span class="r">COILS</span>  <span class="n">0x0F</span>    <span class="c">// P0.0-P0.3</span>
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms){
+    <span class="t">int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++) <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">6000</span>;j++);
+}
+
+<span class="c">// Full step sequence — 4 patterns</span>
+<span class="t">unsigned char</span> step_seq[<span class="n">4</span>] = {
+    <span class="n">0x09</span>, <span class="c">// step 1: coil A+D</span>
+    <span class="n">0x03</span>, <span class="c">// step 2: coil A+B</span>
+    <span class="n">0x06</span>, <span class="c">// step 3: coil B+C</span>
+    <span class="n">0x0C</span>  <span class="c">// step 4: coil C+D</span>
+};
+
+<span class="c">// Rotate CLOCKWISE — n steps, speed in ms</span>
+<span class="k">void</span> <span class="f">clockwise</span>(<span class="t">int</span> n, <span class="t">int</span> speed) {
+    <span class="t">int</span> i;
+    <span class="k">for</span>(i=<span class="n">0</span>; i&lt;n; i++) {
+        IO0CLR = <span class="r">COILS</span>;          <span class="c">// all coils off</span>
+        IO0SET = step_seq[i%<span class="n">4</span>];  <span class="c">// next step</span>
+        <span class="f">delay_ms</span>(speed);
+    }
+}
+
+<span class="c">// Rotate ANTICLOCKWISE — reverse sequence</span>
+<span class="k">void</span> <span class="f">anticlockwise</span>(<span class="t">int</span> n, <span class="t">int</span> speed) {
+    <span class="t">int</span> i;
+    <span class="k">for</span>(i=n-<span class="n">1</span>; i&gt;=<span class="n">0</span>; i--) {
+        IO0CLR = <span class="r">COILS</span>;
+        IO0SET = step_seq[i%<span class="n">4</span>];
+        <span class="f">delay_ms</span>(speed);
+    }
+}
+
+<span class="c">// Stop motor</span>
+<span class="k">void</span> <span class="f">motor_stop</span>() {
+    IO0CLR = <span class="r">COILS</span>;             <span class="c">// all coils off</span>
+}
+
+<span class="k">int</span> <span class="f">main</span>() {
+    PINSEL0 = <span class="n">0x00000000</span>;
+    IO0DIR  = <span class="r">COILS</span>;   <span class="c">// P0.0-P0.3 = output</span>
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="f">clockwise</span>(<span class="n">200</span>, <span class="n">5</span>);      <span class="c">// 1 revolution CW</span>
+        <span class="f">delay_ms</span>(<span class="n">1000</span>);
+        <span class="f">anticlockwise</span>(<span class="n">200</span>, <span class="n">5</span>);  <span class="c">// 1 revolution CCW</span>
+        <span class="f">delay_ms</span>(<span class="n">1000</span>);
+    }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- LAB 9 -->
+<div class="sh">Lab 9 — Serial Transmission ARM LPC2148 to PC</div>
+<div class="card">
+  <div class="card-head">
+    <div class="lab-num" style="background:#1a0a2a;color:var(--purple)">12</div>
+    <div><div class="card-title">Lab 9 — UART0 Serial Transmission LPC2148 ↔ PC</div><div class="card-sub">Send strings from LPC2148 to PC terminal; receive commands from PC</div></div>
+    <div class="tags"><span class="tag" style="background:#1a0a2a;color:var(--purple)">UART0</span><span class="tag" style="background:#2d1f00;color:var(--yellow)">U0LSR</span></div>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <div class="st g">Circuit + Key Registers</div>
+      <div class="ckt">LPC2148 P0.0 (TXD0) ──► USB-UART converter ──► PC
+LPC2148 P0.1 (RXD0) ◄── USB-UART converter ◄── PC
+
+OR via onboard USB if board supports it</div>
+      <table style="margin-top:8px">
+        <tr><th>Register</th><th>Purpose</th></tr>
+        <tr><td class="mono cy">U0LCR</td><td>Line control: word length + DLAB bit</td></tr>
+        <tr><td class="mono cy">U0DLL</td><td>Baud rate divisor low (when DLAB=1)</td></tr>
+        <tr><td class="mono cy">U0DLM</td><td>Baud rate divisor high (when DLAB=1)</td></tr>
+        <tr><td class="mono cy">U0LSR</td><td>Status: bit5=TX ready, bit0=RX data ready</td></tr>
+        <tr><td class="mono cy">U0THR</td><td>Write here to transmit</td></tr>
+        <tr><td class="mono cy">U0RBR</td><td>Read here to receive</td></tr>
+      </table>
+      <div class="info bl" style="margin-top:8px"><span>💡</span><span><b>DLAB=1</b> lets you access DLL/DLM for baud rate. Always clear DLAB (set to 0) before using UART normally.</span></div>
+      <div style="margin-top:8px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:8px;font-family:var(--mono);font-size:11px;line-height:1.8">
+        <span class="cy">Baud divisor = PCLK / (16 × baud)</span><br>
+        <span class="mu">For 9600, PCLK=15MHz:</span><br>
+        <span class="gr">divisor = 15000000 / (16×9600) = 97.65 ≈ 98 = 0x62</span><br>
+        <span class="mu">U0DLM=0x00, U0DLL=0x62</span>
+      </div>
+    </div>
+    <div class="col">
+      <div class="st o">Embedded C Code</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>
+
+<span class="c">// Initialize UART0 at 9600 baud (PCLK=15MHz)</span>
+<span class="k">void</span> <span class="f">uart_init</span>() {
+    <span class="c">// P0.0=TXD0, P0.1=RXD0</span>
+    PINSEL0 |= <span class="n">0x00000005</span>;
+
+    <span class="c">// DLAB=1 to set baud rate</span>
+    U0LCR = <span class="n">0x83</span>;    <span class="c">// 8-bit, no parity, DLAB=1</span>
+    U0DLM = <span class="n">0x00</span>;    <span class="c">// high byte of divisor</span>
+    U0DLL = <span class="n">0x62</span>;    <span class="c">// low byte (9600 baud)</span>
+
+    <span class="c">// DLAB=0 for normal UART use</span>
+    U0LCR = <span class="n">0x03</span>;    <span class="c">// 8-bit, no parity, DLAB=0</span>
+}
+
+<span class="c">// Send one character</span>
+<span class="k">void</span> <span class="f">send_char</span>(<span class="t">unsigned char</span> ch) {
+    <span class="c">// Wait until TX buffer empty (bit5 of LSR)</span>
+    <span class="k">while</span>(!(U0LSR &amp; <span class="n">0x20</span>));
+    U0THR = ch;      <span class="c">// transmit</span>
+}
+
+<span class="c">// Send a string</span>
+<span class="k">void</span> <span class="f">send_string</span>(<span class="t">char</span> *str) {
+    <span class="k">while</span>(*str) <span class="f">send_char</span>(*str++);
+}
+
+<span class="c">// Receive one character (blocking)</span>
+<span class="t">unsigned char</span> <span class="f">recv_char</span>() {
+    <span class="c">// Wait until data ready (bit0 of LSR)</span>
+    <span class="k">while</span>(!(U0LSR &amp; <span class="n">0x01</span>));
+    <span class="k">return</span> U0RBR;    <span class="c">// read received byte</span>
+}
+
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms){<span class="t">int</span> i,j;<span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++)<span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">6000</span>;j++);}
+
+<span class="k">int</span> <span class="f">main</span>() {
+    <span class="t">unsigned char</span> received;
+
+    <span class="f">uart_init</span>();
+
+    <span class="f">send_string</span>(<span class="s">"LPC2148 Ready!\r\n"</span>);
+
+    <span class="k">while</span>(<span class="n">1</span>) {
+        <span class="c">// Send message every 2 seconds</span>
+        <span class="f">send_string</span>(<span class="s">"Hello from ARM!\r\n"</span>);
+        <span class="f">delay_ms</span>(<span class="n">2000</span>);
+
+        <span class="c">// Also echo received bytes back</span>
+        <span class="k">if</span>(U0LSR &amp; <span class="n">0x01</span>) {           <span class="c">// any data?</span>
+            received = U0RBR;
+            <span class="f">send_char</span>(received);      <span class="c">// echo back</span>
+        }
+    }
+}</pre>
+    </div>
+  </div>
+</div>
+
+</div><!-- end ARM page -->
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- REFERENCE PAGE -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="pg-ref" class="page">
+
+<div class="sh">8051 vs LPC2148 — Everything Side by Side</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">Quick Comparison — 8051 C vs LPC2148 C vs 8051 Assembly</div></div>
+  <div class="g3">
+    <div class="col">
+      <div class="st o">8051 Embedded C (Keil C51)</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;reg51.h&gt;</span>
+
+<span class="c">// Name a pin</span>
+<span class="r">sbit</span> LED = P1^<span class="n">0</span>;
+
+<span class="c">// Control</span>
+LED = <span class="n">1</span>;      <span class="c">// HIGH</span>
+LED = <span class="n">0</span>;      <span class="c">// LOW</span>
+LED = !LED;   <span class="c">// toggle</span>
+P1  = <span class="n">0xFF</span>;  <span class="c">// all HIGH</span>
+
+<span class="c">// Timer</span>
+TMOD = <span class="n">0x01</span>;  TH0=<span class="n">0xFC</span>; TL0=<span class="n">0x18</span>;
+TR0=<span class="n">1</span>;  <span class="k">while</span>(!TF0);  TR0=<span class="n">0</span>; TF0=<span class="n">0</span>;
+
+<span class="c">// UART</span>
+TMOD=<span class="n">0x20</span>;TH1=<span class="n">0xFD</span>;SCON=<span class="n">0x50</span>;TR1=<span class="n">1</span>;
+SBUF=ch; <span class="k">while</span>(!TI); TI=<span class="n">0</span>; <span class="c">// TX</span>
+<span class="k">while</span>(!RI); ch=SBUF; RI=<span class="n">0</span>;   <span class="c">// RX</span>
+
+<span class="c">// Interrupt</span>
+ET0=<span class="n">1</span>; EA=<span class="n">1</span>; TR0=<span class="n">1</span>;
+<span class="k">void</span> <span class="f">t0_isr</span>() <span class="r">interrupt</span> <span class="n">1</span> {
+    TH0=<span class="n">0xFC</span>; TL0=<span class="n">0x18</span>; <span class="c">// reload</span>
+    LED = !LED;
+}</pre>
+    </div>
+    <div class="col">
+      <div class="st b">LPC2148 Embedded C</div>
+      <pre><span class="d">#include</span> <span class="s">&lt;lpc214x.h&gt;</span>
+
+<span class="c">// Name a pin</span>
+<span class="d">#define</span> <span class="r">LED</span> (<span class="n">1</span>&lt;&lt;<span class="n">10</span>)
+
+<span class="c">// Control (3 steps first)</span>
+PINSEL0 &amp;=~(<span class="n">3</span>&lt;&lt;<span class="n">20</span>); <span class="c">// GPIO</span>
+IO0DIR  |= <span class="r">LED</span>;      <span class="c">// output</span>
+IO0SET   = <span class="r">LED</span>;      <span class="c">// HIGH</span>
+IO0CLR   = <span class="r">LED</span>;      <span class="c">// LOW</span>
+
+<span class="c">// UART</span>
+PINSEL0 |=<span class="n">0x00000005</span>; <span class="c">// TX+RX</span>
+U0LCR=<span class="n">0x83</span>; U0DLL=<span class="n">0x62</span>;
+U0DLM=<span class="n">0x00</span>; U0LCR=<span class="n">0x03</span>;
+<span class="k">while</span>(!(U0LSR&<span class="n">0x20</span>));
+U0THR=ch;              <span class="c">// TX</span>
+<span class="k">while</span>(!(U0LSR&<span class="n">0x01</span>));
+ch=U0RBR;              <span class="c">// RX</span>
+
+<span class="c">// Delay</span>
+<span class="k">void</span> <span class="f">delay_ms</span>(<span class="t">int</span> ms){
+    <span class="t">int</span> i,j;
+    <span class="k">for</span>(i=<span class="n">0</span>;i&lt;ms;i++)
+      <span class="k">for</span>(j=<span class="n">0</span>;j&lt;<span class="n">6000</span>;j++);
+}</pre>
+    </div>
+    <div class="col">
+      <div class="st p">8051 Assembly Structure</div>
+      <pre class="asm">; Always this structure:
+      ORG   0000H
+      LJMP  MAIN      ; skip vectors
+
+; ISR vectors (if used):
+      ORG   0003H     ; INT0
+      LJMP  INT0_ISR
+      ORG   000BH     ; Timer0
+      LJMP  T0_ISR
+
+; Main code at 0030H:
+      ORG   0030H
+MAIN:
+      MOV  SP, #50H   ; set stack
+      ; your setup
+LOOP:
+      ; main loop
+      SJMP LOOP
+
+; ISRs:
+T0_ISR:
+      ; reload, do work
+      RETI            ; MUST be RETI
+
+; Delay subroutine:
+DELAY:
+      MOV  R5,#4
+L1:   MOV  R6,#250
+L2:   MOV  R7,#250
+L3:   DJNZ R7,L3
+      DJNZ R6,L2
+      DJNZ R5,L1
+      RET
+      END             ; mandatory</pre>
+    </div>
+  </div>
+</div>
+
+<div class="sh">Common Mistakes — Things That Will Fail Your Program</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">Never Do These</div></div>
+  <div class="g2">
+    <div class="col">
+      <div class="st r">8051 Mistakes</div>
+      <table>
+        <tr><th>❌ Wrong</th><th>✅ Right</th><th>Why</th></tr>
+        <tr><td class="mono rd">...RET (in ISR)</td><td class="mono gr">...RETI</td><td>RET doesn't reset interrupt priority</td></tr>
+        <tr><td class="mono rd">JNB TI,$ (no CLR)</td><td class="mono gr">CLR TI after</td><td>Flag never clears → locks up</td></tr>
+        <tr><td class="mono rd">JNB RI,$ (no CLR)</td><td class="mono gr">CLR RI after</td><td>Same — RI stays 1 forever</td></tr>
+        <tr><td class="mono rd">MOV A,P1</td><td class="mono gr">MOV P1,#FFH first</td><td>Must release port latch</td></tr>
+        <tr><td class="mono rd">EA not set</td><td class="mono gr">Always EA=1</td><td>No interrupt fires without EA</td></tr>
+        <tr><td class="mono rd">interrupt 4 (T0)</td><td class="mono gr">interrupt 1 (T0)</td><td>Timer0 is interrupt 1, not 4</td></tr>
+        <tr><td class="mono rd">No delay after 0x01</td><td class="mono gr">delay_ms(5)</td><td>LCD clear takes extra time</td></tr>
+        <tr><td class="mono rd">SJMP (not LJMP) to ISR</td><td class="mono gr">LJMP at vector</td><td>ISR may be far from vector</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="st r">LPC2148 Mistakes</div>
+      <table>
+        <tr><th>❌ Wrong</th><th>✅ Right</th><th>Why</th></tr>
+        <tr><td class="mono rd">IO0SET = 0;</td><td class="mono gr">IO0CLR = (1&lt;&lt;n)</td><td>Writing 0 to SET = no effect</td></tr>
+        <tr><td class="mono rd">Skip PINSEL</td><td class="mono gr">Always do PINSEL</td><td>Pin may be assigned to UART etc.</td></tr>
+        <tr><td class="mono rd">U0THR when DLAB=1</td><td class="mono gr">Clear DLAB first</td><td>When DLAB=1, that addr = DLL</td></tr>
+        <tr><td class="mono rd">PINSEL0 = (1&lt;&lt;20)</td><td class="mono gr">PINSEL0 &= ~(3&lt;&lt;20)</td><td>Must clear both bits for GPIO</td></tr>
+        <tr><td class="mono rd">No lcd_init()</td><td class="mono gr">lcd_init() first</td><td>LCD undefined without init</td></tr>
+        <tr><td class="mono rd">IO0DIR for Port1</td><td class="mono gr">Use IO1DIR</td><td>Port 1 has its own registers</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="sh">LCD Reference + Timer Preloads</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">All LCD Commands + Timer Values + Interrupt Numbers</div></div>
+  <div class="g4">
+    <div class="col">
+      <div class="st p">LCD Commands</div>
+      <table>
+        <tr><th>Hex</th><th>Effect</th></tr>
+        <tr><td class="mono cy">0x38</td><td>8-bit, 2 lines, 5×8</td></tr>
+        <tr><td class="mono cy">0x0C</td><td>Display ON cursor OFF</td></tr>
+        <tr><td class="mono cy">0x0E</td><td>Display ON cursor ON</td></tr>
+        <tr><td class="mono or">0x01</td><td>Clear screen</td></tr>
+        <tr><td class="mono cy">0x02</td><td>Return home</td></tr>
+        <tr><td class="mono cy">0x06</td><td>Cursor → right</td></tr>
+        <tr><td class="mono cy">0x80</td><td>Line 1 col 0</td></tr>
+        <tr><td class="mono cy">0xC0</td><td>Line 2 col 0</td></tr>
+        <tr><td class="mono">0x80+n</td><td>Line 1 col n</td></tr>
+        <tr><td class="mono">0xC0+n</td><td>Line 2 col n</td></tr>
+        <tr><td class="mono">0x18</td><td>Scroll left</td></tr>
+        <tr><td class="mono">0x1C</td><td>Scroll right</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="st o">8051 Timer Preloads (12MHz)</div>
+      <table>
+        <tr><th>Delay</th><th>TH0</th><th>TL0</th></tr>
+        <tr><td>1ms</td><td class="mono cy">0xFC</td><td class="mono cy">0x18</td></tr>
+        <tr><td>5ms</td><td class="mono cy">0xEE</td><td class="mono cy">0x00</td></tr>
+        <tr><td>10ms</td><td class="mono cy">0xD8</td><td class="mono cy">0xF0</td></tr>
+        <tr><td>50ms</td><td class="mono cy">0x3C</td><td class="mono cy">0xB0</td></tr>
+        <tr><td>100ms</td><td class="mono cy">0x79</td><td class="mono cy">0x60</td></tr>
+      </table>
+      <div class="st o" style="margin-top:8px">Baud TH1 (11.0592MHz)</div>
+      <table>
+        <tr><th>Baud</th><th>TH1</th></tr>
+        <tr><td>9600</td><td class="mono cy">0xFD</td></tr>
+        <tr><td>4800</td><td class="mono cy">0xFA</td></tr>
+        <tr><td>2400</td><td class="mono cy">0xF4</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="st b">interrupt Numbers (C)</div>
+      <table>
+        <tr><th>Source</th><th>Number</th></tr>
+        <tr><td>INT0 (P3.2)</td><td class="mono or">0</td></tr>
+        <tr><td>Timer 0</td><td class="mono or">1</td></tr>
+        <tr><td>INT1 (P3.3)</td><td class="mono or">2</td></tr>
+        <tr><td>Timer 1</td><td class="mono or">3</td></tr>
+        <tr><td>Serial (TI/RI)</td><td class="mono or">4</td></tr>
+      </table>
+      <div class="st g" style="margin-top:8px">IE Register Bits</div>
+      <table>
+        <tr><th>Bit</th><th>Name</th><th>Controls</th></tr>
+        <tr><td>7</td><td class="mono gr">EA</td><td>Global enable</td></tr>
+        <tr><td>4</td><td class="mono">ET1</td><td>Timer 1</td></tr>
+        <tr><td>3</td><td class="mono">EX1</td><td>INT1</td></tr>
+        <tr><td>2</td><td class="mono">ET0</td><td>Timer 0</td></tr>
+        <tr><td>1</td><td class="mono">EX0</td><td>INT0</td></tr>
+        <tr><td>0</td><td class="mono">ES</td><td>Serial</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="st y">7-Segment Codes (CC)</div>
+      <table>
+        <tr><th>Digit</th><th>Code</th></tr>
+        <tr><td>0</td><td class="mono cy">0x3F</td></tr>
+        <tr><td>1</td><td class="mono cy">0x06</td></tr>
+        <tr><td>2</td><td class="mono cy">0x5B</td></tr>
+        <tr><td>3</td><td class="mono cy">0x4F</td></tr>
+        <tr><td>4</td><td class="mono cy">0x66</td></tr>
+        <tr><td>5</td><td class="mono cy">0x6D</td></tr>
+        <tr><td>6</td><td class="mono cy">0x7D</td></tr>
+        <tr><td>7</td><td class="mono cy">0x07</td></tr>
+        <tr><td>8</td><td class="mono cy">0x7F</td></tr>
+        <tr><td>9</td><td class="mono cy">0x6F</td></tr>
+      </table>
+      <div class="info yw" style="margin-top:6px"><span>⚠</span><span>Common Anode: ~code</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sh">Exam Day Checklist</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">Before You Submit Any Lab Code</div></div>
+  <div class="g3">
+    <div class="col">
+      <div class="st o">8051 C Checklist</div>
+      <ul class="steps">
+        <li><span class="sn">✓</span><span class="st2"><code class="mono">#include &lt;reg51.h&gt;</code> — first line</span></li>
+        <li><span class="sn">✓</span><span class="st2">All pin names defined with <code class="mono">sbit</code></span></li>
+        <li><span class="sn">✓</span><span class="st2">delay_ms() function written</span></li>
+        <li><span class="sn">✓</span><span class="st2">ISR written with <code class="mono">interrupt N</code> keyword</span></li>
+        <li><span class="sn">✓</span><span class="st2">EA=1 set before any interrupt can fire</span></li>
+        <li><span class="sn">✓</span><span class="st2">TI and RI cleared after every TX/RX</span></li>
+        <li><span class="sn">✓</span><span class="st2">TF0/TF1 cleared after polling</span></li>
+        <li><span class="sn">✓</span><span class="st2">P1=0xFF before reading P1</span></li>
+        <li><span class="sn">✓</span><span class="st2">lcd_init() called before any LCD use</span></li>
+        <li><span class="sn">✓</span><span class="st2">while(1) at end of main()</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st b">LPC2148 C Checklist</div>
+      <ul class="steps">
+        <li><span class="sn">✓</span><span class="st2"><code class="mono">#include &lt;lpc214x.h&gt;</code> — first line</span></li>
+        <li><span class="sn">✓</span><span class="st2">All pin names defined with <code class="mono">#define</code></span></li>
+        <li><span class="sn">✓</span><span class="st2">PINSEL configured before IO0DIR</span></li>
+        <li><span class="sn">✓</span><span class="st2">IO0DIR set before IO0SET/CLR</span></li>
+        <li><span class="sn">✓</span><span class="st2">Using IO0CLR (not IO0SET=0) to turn LOW</span></li>
+        <li><span class="sn">✓</span><span class="st2">DLAB cleared after baud rate setup</span></li>
+        <li><span class="sn">✓</span><span class="st2">lcd_init() called before LCD use</span></li>
+        <li><span class="sn">✓</span><span class="st2">delay_ms() uses 6000 inner count (not 125)</span></li>
+        <li><span class="sn">✓</span><span class="st2">Stepper: IO0CLR coils before IO0SET step</span></li>
+        <li><span class="sn">✓</span><span class="st2">while(1) or while(1); at end</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="st p">8051 Assembly Checklist</div>
+      <ul class="steps">
+        <li><span class="sn">✓</span><span class="st2">ORG 0000H + LJMP MAIN at start</span></li>
+        <li><span class="sn">✓</span><span class="st2">ORG 0030H before main code</span></li>
+        <li><span class="sn">✓</span><span class="st2">ISR at correct vector ORG</span></li>
+        <li><span class="sn">✓</span><span class="st2">RETI (not RET) in ISR</span></li>
+        <li><span class="sn">✓</span><span class="st2">SETB EA before enabling any interrupt</span></li>
+        <li><span class="sn">✓</span><span class="st2">CLR TF0 after timer polling</span></li>
+        <li><span class="sn">✓</span><span class="st2">CLR TI / CLR RI after serial ops</span></li>
+        <li><span class="sn">✓</span><span class="st2">END directive — last line of file</span></li>
+        <li><span class="sn">✓</span><span class="st2">SJMP LOOP (or SJMP $) at end of main</span></li>
+        <li><span class="sn">✓</span><span class="st2">LCD: P2.0 CLR for cmd, SETB for data</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sh">Extra Section — OVERALL.C (As Provided)</div>
+<div class="card">
+  <div class="card-head"><div class="card-title">Complete OVERALL.C Code Dump</div></div>
+  <div class="col full">
+    <pre>#include &lt;reg51.h&gt;
+
+sbit RS = P3^0;
+sbit E = P3^1;
+
+sbit LED = P3^7;
+sbit LED2 = P1^7;
+
+#define LCD_DATA P2
+
+void delay_old(int ms) {
+  int i, j;
+  for (i = 0; i &lt; ms; i++)
+    for (j = 0; j &lt; 127; j++);
+}
+
+void interrupt0ISR() interrupt 0 {
+  LED2 ^= 1;
+}
+
+void interrupt2ISR() interrupt 2 {
+  LED2 ^= 1;
+  delay(1000);
+}
+
+
+void interrupt_init() {
+  IT0 = 1; // only from high to low
+  IT1 = 0; //low level continuous trigger on 
+  EX0 = 1;
+  EX1 = 1;
+  EA = 1;
+}
+
+void lcd_pulse() {
+  delay(2);
+  E = 1;
+  delay(2);
+  E = 0;
+}
+
+void lcd_cmd(unsigned char cmd) {
+  RS = 0;
+  LCD_DATA = cmd;
+  lcd_pulse();
+}
+
+void lcd_byte(unsigned char ch) {
+  RS = 1;
+  LCD_DATA = ch;
+  lcd_pulse();
+}
+
+void lcd_clr() {
+  lcd_cmd(0x01);
+}
+
+void lcd_init() {
+  RS = 0;
+  lcd_cmd(0x38);
+  lcd_cmd(0x0E);
+  lcd_clr();
+}
+
+void lcd_print(char *str) {
+  while (*str != 0)
+    lcd_byte(*str++);
+}
+
+void timer_delay(int ms){
+    TMOD = 0x01;   // Timer0 Mode1
+    
+    while (ms--){
+        TH0 = 0xFC;   // Reload each time
+        TL0 = 0x66;
+
+        TR0 = 1;      // Start timer
+        
+        while(TF0 == 0);  // Wait for overflow
+        
+        TR0 = 0;      // Stop timer
+        TF0 = 0;      // Clear flag
+    }
+}
+
+int main() {
+  int i;
+  interrupt_init();
+  lcd_init();
+  lcd_print("JASSI IS GAY");
+  for (;;) {
+    LED = 1;
+    delay(1000);
+    LED = 0;
+    delay(1000);
+  }
+}
+
+
+
+// SERIAL
+#include &lt;reg51.h&gt;
+
+void delay(int ms) {
+  int i, j;
+  for (i = 0; i &lt; ms; i++)
+    for (j = 0; j &lt; 127; j++);
+}
+
+void UART_init() {
+  TMOD = 0x20;
+  TH1 = 0xFD;
+  TR1 = 1;
+  SCON = 0x50;
+}
+
+void UART_transmit(unsigned char ch) {
+  SBUF = ch;
+  while (TI == 0);
+  TI = 0;
+}
+
+unsigned char UART_receive() {
+  while (RI == 0);
+  RI = 0;
+  return SBUF;
+}
+
+void UART_string(char *str) {
+  while (*str != 0)
+    UART_transmit(*str++);
+}
+
+int main() {
+  UART_init();
+  delay(100);
+  UART_string("JASSI IS NOT GAY CUZ WE HAVE PROOF NOW ;)");
+  while (1);
+}
+
+
+
+//LPC2148 
+#include &lt;lpc214x.h&gt;
+
+#define RS (1 &lt;&lt; 16)
+#define RW (1 &lt;&lt; 17)
+#define E (1 &lt;&lt; 18)
+
+void LCD_pulse() {
+  IOSET0 = E;
+  delay(2);
+  IOCLR0 = E;
+  delay(2);
+}
+
+void LCD_cmd(char ch) {
+  IOCLR0 = RS;
+  IOCLR1 = 0xFF &lt;&lt; 16;
+  IOSET1 = (int)ch &lt;&lt; 16;
+	
+  LCD_pulse();
+}
+
+void LCD_data(char ch) {
+  IOSET0 = RS;
+  IOCLR1 = 0xFF &lt;&lt; 16;
+  IOSET1 = (int)ch &lt;&lt; 16;
+	
+  LCD_pulse();
+}
+
+void LCD_str(char *str) {
+  while (*str != 0)
+    LCD_data(*str++);
+}
+
+void LCD_init() {
+  IODIR0 |= 7 &lt;&lt; 16;
+  IODIR1 |= 0xFF &lt;&lt; 16;
+  LCD_cmd(0x38);
+  LCD_cmd(0x0E);
+}
+
+// serial
+
+#include &lt;lpc214x.h&gt;
+
+void UART_init() {
+  VPBDIV = 1;
+  PINSEL0 |= 5; // 0101
+  U0LCR = (1 &lt;&lt; 7);
+  U0DLL = 65;
+  U0DLM = 0;
+  U0LCR = 3;
+}
+
+void UART_send(char ch) {
+  while (!(U0LSR &amp; (1 &lt;&lt; 5)));
+  U0THR = ch;
+}
+
+void UART_send_str(char *str) {
+  while (*str != 0)
+    UART_send(*str++);
+}
+
+char UART_recv() {
+  while (!(U0LSR &amp; 1));
+  return U0RBR;
+}
+
+int main() {
+  UART_init();
+  UART_send_str("hello world");
+  while (1);
+}</pre>
+  </div>
+</div>
+
+</div><!-- end ref page -->
+
+<script>
+function go(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+name).classList.add('on');
+  event.target.classList.add('on');
+}
+</script>
+</body>
+</html>
